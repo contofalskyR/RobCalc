@@ -138,6 +138,17 @@ table.nice{border-collapse:collapse; width:100%; font-size:14px;}
 table.nice th{background:var(--bg); text-align:left; padding:8px 12px; border:1px solid var(--line); font-size:12.5px; text-transform:uppercase; letter-spacing:.04em; color:var(--ink2);}
 table.nice td{padding:8px 12px; border:1px solid var(--line);}
 .footer-note{color:var(--ink3); font-size:12.5px; margin-top:30px; text-align:center;}
+/* flags */
+.ex,.prob,.keybox,.warnbox{position:relative;}
+.flagbtn{background:var(--card);border:1.5px solid var(--line);border-radius:999px;color:var(--ink3);cursor:pointer;font-size:11.5px;font-weight:600;padding:2px 10px;font-family:inherit;line-height:1.5;vertical-align:middle;}
+.flagbtn:hover{border-color:#f59e0b;color:#b45309;}
+.flagbtn.on{background:#fef3c7;border-color:#f59e0b;color:#b45309;}
+.flagbtn.corner{position:absolute;top:9px;right:11px;}
+.flagnote{margin-top:9px;}
+.flagnote input{width:100%;box-sizing:border-box;border:1.5px dashed #fcd34d;background:#fffbeb;border-radius:8px;padding:7px 11px;font-size:13px;font-family:inherit;outline:none;color:var(--ink);}
+.flagnote input:focus{border-style:solid;}
+.fmeta{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px;}
+.fkind{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--acc);background:var(--acc2);padding:2px 10px;border-radius:999px;}
 /* videos */
 .vid{display:flex; gap:16px; border:1px solid var(--line); border-radius:12px; padding:14px; margin-bottom:14px; background:var(--card); flex-wrap:wrap;}
 .vthumb{position:relative; width:300px; max-width:100%; aspect-ratio:16/9; border-radius:9px; background-size:cover; background-position:center; cursor:pointer; flex-shrink:0; overflow:hidden; background-color:#000;}
@@ -175,7 +186,7 @@ table.nice td{padding:8px 12px; border:1px solid var(--line);}
 <script>
 "use strict";
 /* ================= state ================= */
-var store = {visited:{}, quizBest:{}, drillsOk:{}, weeks:{}, tab:{}};
+var store = {visited:{}, quizBest:{}, drillsOk:{}, weeks:{}, tab:{}, flags:{}};
 try{
   var raw = localStorage.getItem("calcprob_v1");
   if(raw){ store = Object.assign(store, JSON.parse(raw)); }
@@ -1041,6 +1052,7 @@ function renderSidebar(){
   h += navBtn("plan", "📅", "Study Plan");
   h += navBtn("ref", "📋", "Formula Sheet");
   h += navBtn("library", "▶", "Video Library");
+  h += navBtn("flagged", "⚑", "Flagged" + (flagCount() ? " (" + flagCount() + ")" : ""));
   h += '<div class="navsec">Modules</div>';
   MODULES.forEach(function(m, i){
     var st = modStatus(m);
@@ -1065,6 +1077,7 @@ function go(page, tab){
   else if(page === "plan") renderPlan();
   else if(page === "ref") renderRef();
   else if(page === "library") renderLibrary();
+  else if(page === "flagged") renderFlagged();
   else {
     var idx = MODULES.findIndex(function(m){ return m.id === page; });
     if(idx >= 0) renderModule(idx);
@@ -1188,7 +1201,7 @@ function renderModule(idx){
     b.addEventListener("click", function(){ go(b.getAttribute("data-page")); });
   });
   var body = document.getElementById("modbody");
-  if(tab === "lesson"){ body.innerHTML = '<div class="card lesson">' + m.lesson + '</div>'; }
+  if(tab === "lesson"){ body.innerHTML = '<div class="card lesson">' + m.lesson + '</div>'; injectLessonFlags(body, m); }
   else if(tab === "videos"){ renderVideosTab(m, body); }
   else if(tab === "quiz"){ renderQuiz(m, body); }
   else { renderDrills(m, body); }
@@ -1203,7 +1216,8 @@ function renderQuiz(m, body){
   var best = quizPct(m);
   var h = '<div class="card"><p style="font-size:14px;color:var(--ink2);margin-bottom:18px;">Answer every question. <b>80% or higher</b> marks this module as mastered. Best so far: <b>' + best + '%</b>. You can retake it as many times as you like.</p>';
   m.quiz.forEach(function(q, qi){
-    h += '<div class="qq" data-q="' + qi + '"><div class="qtext">' + (qi+1) + '. ' + q.q + '</div><div class="opts">';
+    var qfid = m.id + ":quiz:" + qi;
+    h += '<div class="qq" data-flaghost data-q="' + qi + '"><div class="qtext">' + (qi+1) + '. ' + q.q + ' ' + flagBtn(qfid) + '</div>' + noteRow(qfid) + '<div class="opts">';
     q.opts.forEach(function(o, oi){
       h += '<button class="opt" data-o="' + oi + '">' + o + '</button>';
     });
@@ -1244,6 +1258,7 @@ function renderQuiz(m, body){
     });
   });
   document.getElementById("qreset").addEventListener("click", function(){ renderQuiz(m, body); mathify(body); });
+  wireFlags(body);
   finishCheck();
 }
 
@@ -1253,7 +1268,8 @@ function renderDrills(m, body){
   var h = '<div class="card"><p style="font-size:14px;color:var(--ink2);margin-bottom:18px;">Type your answer and press Check (or Enter). Formatting is forgiving — <code>3x^2</code>, <code>1/2</code>, <code>0.5</code>, <code>e^(-2)</code> all work where sensible. Stuck? Open the solution — reading worked solutions is studying, not cheating.</p>';
   m.drills.forEach(function(d, di){
     var okBefore = got[di];
-    h += '<div class="drill" data-d="' + di + '"><div class="dq">' + (di+1) + '. ' + d.q + '</div>' +
+    var dfid = m.id + ":drill:" + di;
+    h += '<div class="drill" data-flaghost data-d="' + di + '"><div class="dq">' + (di+1) + '. ' + d.q + ' ' + flagBtn(dfid) + '</div>' + noteRow(dfid) +
       '<div class="drillrow"><input type="text" placeholder="your answer" ' + (okBefore ? 'value="✓ solved" disabled class="ok"' : '') + '>' +
       '<button class="btn small">Check</button><span class="dmark' + (okBefore ? ' ok' : '') + '">' + (okBefore ? "Solved ✓" : "") + '</span></div>' +
       (d.hint ? '<div class="hinttag">Hint: ' + d.hint + '</div>' : '') +
@@ -1281,10 +1297,187 @@ function renderDrills(m, body){
     dEl.querySelector("button").addEventListener("click", doCheck);
     input.addEventListener("keydown", function(e){ if(e.key === "Enter") doCheck(); });
   });
+  wireFlags(body);
   var solDetails = body.querySelectorAll("details.sol");
   solDetails.forEach(function(det){
     det.addEventListener("toggle", function(){ if(det.open) mathify(det); });
   });
+}
+
+/* ================= flags: mark anything for review + copy-for-help ================= */
+var LESSON_BOXES = {};
+(function(){
+  try{
+    MODULES.forEach(function(m){
+      var d = document.createElement("div");
+      d.innerHTML = m.lesson;
+      LESSON_BOXES[m.id] = Array.prototype.map.call(d.querySelectorAll(".ex,.prob,.keybox,.warnbox"), function(b){ return b.outerHTML; });
+    });
+  }catch(e){ /* non-browser env */ }
+})();
+function flagCount(){ return Object.keys(store.flags || {}).length; }
+function fidParts(fid){ var p = fid.split(":"); return {mid:p[0], kind:p[1], idx:+p[2]}; }
+function esc2(s){ return (s||"").replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;"); }
+function flagBtn(fid, corner){
+  var on = !!store.flags[fid];
+  return '<button class="flagbtn' + (on ? ' on' : '') + (corner ? ' corner' : '') + '" data-fid="' + fid + '" title="Flag this for review — flagged items collect on the Flagged page">' + (on ? '&#9873; flagged' : '&#9872; flag') + '</button>';
+}
+function noteRow(fid){
+  var f = store.flags[fid];
+  if(!f) return "";
+  return '<div class="flagnote"><input type="text" maxlength="200" placeholder="optional note — what&#39;s confusing about this?" value="' + esc2(f.note) + '" data-fid="' + fid + '"></div>';
+}
+function wireNotes(container){
+  container.querySelectorAll(".flagnote input").forEach(function(inp){
+    if(inp._wired) return; inp._wired = true;
+    inp.addEventListener("input", function(){
+      var fid = inp.getAttribute("data-fid");
+      if(store.flags[fid]){ store.flags[fid].note = inp.value; save(); }
+    });
+  });
+}
+function wireFlags(container){
+  container.querySelectorAll(".flagbtn").forEach(function(b){
+    if(b._wired) return; b._wired = true;
+    b.addEventListener("click", function(e){
+      e.stopPropagation(); e.preventDefault();
+      var fid = b.getAttribute("data-fid");
+      var turningOn = !store.flags[fid];
+      if(turningOn){ store.flags[fid] = {note:"", t:Date.now()}; } else { delete store.flags[fid]; }
+      save();
+      b.classList.toggle("on", turningOn);
+      b.innerHTML = turningOn ? '&#9873; flagged' : '&#9872; flag';
+      var host = b.closest("[data-flaghost]");
+      if(host){
+        var existing = host.querySelector('.flagnote input[data-fid="' + fid + '"]');
+        if(turningOn && !existing){
+          var div = document.createElement("div");
+          div.className = "flagnote";
+          div.innerHTML = '<input type="text" maxlength="200" placeholder="optional note — what&#39;s confusing about this?" value="" data-fid="' + fid + '">';
+          host.appendChild(div);
+          wireNotes(host);
+          var inp = div.querySelector("input"); if(inp) inp.focus();
+        }
+        if(!turningOn && existing){ existing.closest(".flagnote").remove(); }
+      }
+      renderSidebar();
+    });
+  });
+  wireNotes(container);
+}
+function injectLessonFlags(body, m){
+  var boxes = body.querySelectorAll(".ex,.prob,.keybox,.warnbox");
+  Array.prototype.forEach.call(boxes, function(box, i){
+    var fid = m.id + ":lesson:" + i;
+    box.setAttribute("data-flaghost","1");
+    box.insertAdjacentHTML("beforeend", flagBtn(fid, true) + noteRow(fid));
+  });
+  wireFlags(body);
+}
+function htmlToText(html){
+  var d = document.createElement("div");
+  d.innerHTML = (html||"").replace(/<\/(p|div|li|h3|h4|summary)>/g, "\n").replace(/<br\s*\/?>/g, "\n");
+  var t = d.textContent || d.innerText || "";
+  return t.replace(/[ \t]+\n/g, "\n").replace(/\n{3,}/g, "\n\n").trim();
+}
+function buildHelpText(fid){
+  var p = fidParts(fid);
+  var m = MODULES.find(function(x){ return x.id === p.mid; });
+  if(!m) return "";
+  var f = store.flags[fid] || {};
+  var L = ["[From my calculus-for-probability study app — an item I flagged as confusing]", "Module: " + m.title, ""];
+  if(p.kind === "quiz"){
+    var q = m.quiz[p.idx];
+    L.push("Quiz question: " + htmlToText(q.q), "");
+    q.opts.forEach(function(o, i){ L.push(String.fromCharCode(65+i) + ") " + htmlToText(o) + (i === q.c ? "   <-- marked correct" : "")); });
+    L.push("", "Explanation the app gave: " + htmlToText(q.expl));
+  } else if(p.kind === "drill"){
+    var d = m.drills[p.idx];
+    L.push("Practice problem: " + htmlToText(d.q));
+    if(d.hint) L.push("Hint the app gave: " + d.hint);
+    L.push("Solution the app gave: " + htmlToText(d.sol));
+  } else {
+    L.push("Lesson excerpt:", "", htmlToText((LESSON_BOXES[p.mid] || [])[p.idx] || ""));
+  }
+  if(f.note) L.push("", "My note about what confuses me: " + f.note);
+  L.push("", "I'm teaching myself calculus over the summer for an intro probability course (I've never taken calculus). Please explain this step by step in a different way than above, then give me one similar practice problem to check my understanding. (Math is written in LaTeX between $ signs.)");
+  return L.join("\n");
+}
+function copyText(t, btn){
+  function ok(){ var o = btn.innerHTML; btn.innerHTML = "Copied &#10003; — now paste it to Claude"; setTimeout(function(){ btn.innerHTML = o; }, 2200); }
+  function fallback(){
+    try{
+      var ta = document.createElement("textarea");
+      ta.value = t; ta.style.position = "fixed"; ta.style.opacity = "0";
+      document.body.appendChild(ta); ta.select();
+      document.execCommand("copy"); ta.remove(); ok();
+    }catch(e){ window.prompt("Copy this text:", t); }
+  }
+  if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(t).then(ok, fallback); } else { fallback(); }
+}
+var KIND_LABEL = {lesson:"Lesson excerpt", quiz:"Quiz question", drill:"Practice drill"};
+var KIND_TAB = {lesson:"lesson", quiz:"quiz", drill:"drills"};
+function renderFlagged(){
+  var fids = Object.keys(store.flags || {});
+  var h = '<div class="crumb">Flagged</div><h2 class="pagetitle">&#9873; Flagged for Review</h2>' +
+    '<p class="pagesub">Everything you’ve marked as confusing, in one place. Revisit these before each quiz — and before the real exams. “Copy for help” packages the whole problem so you can paste it to Claude, a tutor, or your professor and just ask.</p>';
+  if(!fids.length){
+    h += '<div class="card" style="text-align:center;padding:44px 24px;"><div style="font-size:34px;margin-bottom:8px;">&#9872;</div><b>Nothing flagged yet.</b><p style="color:var(--ink2);font-size:14px;margin-top:6px;">Tap the small <b>&#9872; flag</b> button on any example, quiz question, or practice drill when something confuses you. It’ll show up here with everything needed to get help.</p></div>';
+    mainEl.innerHTML = h; return;
+  }
+  // sort: module order, then lesson/quiz/drill, then index
+  var kindOrder = {lesson:0, quiz:1, drill:2};
+  fids.sort(function(a,b){
+    var A = fidParts(a), B = fidParts(b);
+    var ma = MODULES.findIndex(function(x){return x.id===A.mid;}), mb = MODULES.findIndex(function(x){return x.id===B.mid;});
+    if(ma!==mb) return ma-mb;
+    if(kindOrder[A.kind]!==kindOrder[B.kind]) return kindOrder[A.kind]-kindOrder[B.kind];
+    return A.idx-B.idx;
+  });
+  fids.forEach(function(fid){
+    var p = fidParts(fid);
+    var m = MODULES.find(function(x){ return x.id === p.mid; });
+    if(!m){ return; }
+    var body = "";
+    if(p.kind === "quiz" && m.quiz[p.idx]){
+      var q = m.quiz[p.idx];
+      body = '<div style="font-weight:600;margin-bottom:8px;">' + q.q + '</div>';
+      q.opts.forEach(function(o,i){ body += '<div style="padding:4px 0;' + (i===q.c ? 'color:var(--ok);font-weight:650;' : 'color:var(--ink2);') + '">' + String.fromCharCode(65+i) + ') ' + o + (i===q.c ? ' &#10003;' : '') + '</div>'; });
+      body += '<div class="expl show" style="margin-top:10px;">' + q.expl + '</div>';
+    } else if(p.kind === "drill" && m.drills[p.idx]){
+      var d = m.drills[p.idx];
+      body = '<div style="font-weight:600;margin-bottom:8px;">' + d.q + '</div>' +
+        (d.hint ? '<div class="hinttag">Hint: ' + d.hint + '</div>' : '') +
+        '<details class="sol"><summary>Show solution</summary><div class="solbody">' + d.sol + '</div></details>';
+    } else {
+      body = (LESSON_BOXES[p.mid] || [])[p.idx] || '<i>(excerpt unavailable)</i>';
+    }
+    var f = store.flags[fid];
+    h += '<div class="card" data-flaghost>' +
+      '<div class="fmeta"><span class="fkind">' + (KIND_LABEL[p.kind] || p.kind) + '</span><span style="font-size:13px;color:var(--ink2);font-weight:600;">' + m.title + '</span>' +
+      '<span style="margin-left:auto;display:flex;gap:8px;flex-wrap:wrap;">' +
+      '<button class="btn ghost small" data-goto="' + p.mid + '" data-gotab="' + (KIND_TAB[p.kind]||"lesson") + '">Go to it</button>' +
+      '<button class="btn small" data-copy="' + fid + '">Copy for help</button>' +
+      '<button class="btn ghost small" data-unflag="' + fid + '">Unflag</button>' +
+      '</span></div>' +
+      '<div>' + body + '</div>' +
+      '<div class="flagnote"><input type="text" maxlength="200" placeholder="optional note — what&#39;s confusing about this?" value="' + esc2(f.note) + '" data-fid="' + fid + '"></div>' +
+      '</div>';
+  });
+  mainEl.innerHTML = h;
+  mainEl.querySelectorAll("[data-goto]").forEach(function(b){
+    b.addEventListener("click", function(){ go(b.getAttribute("data-goto"), b.getAttribute("data-gotab")); });
+  });
+  mainEl.querySelectorAll("[data-copy]").forEach(function(b){
+    b.addEventListener("click", function(){ copyText(buildHelpText(b.getAttribute("data-copy")), b); });
+  });
+  mainEl.querySelectorAll("[data-unflag]").forEach(function(b){
+    b.addEventListener("click", function(){ delete store.flags[b.getAttribute("data-unflag")]; save(); renderFlagged(); renderSidebar(); mathify(mainEl); });
+  });
+  wireNotes(mainEl);
+  var sols = mainEl.querySelectorAll("details.sol");
+  sols.forEach(function(det){ det.addEventListener("toggle", function(){ if(det.open) mathify(det); }); });
+  mathify(mainEl);
 }
 
 /* ================= boot ================= */
@@ -1293,4 +1486,3 @@ if(document.readyState === "loading"){ document.addEventListener("DOMContentLoad
 </script>
 </body>
 </html>
-
