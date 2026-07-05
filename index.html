@@ -1,0 +1,1295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculus for Probability — Summer Bootcamp</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<style>
+:root{
+  --ink:#1e293b; --ink2:#475569; --ink3:#94a3b8;
+  --bg:#f6f7fb; --card:#ffffff; --line:#e2e8f0;
+  --acc:#4f46e5; --acc2:#eef2ff; --acc3:#c7d2fe;
+  --ok:#059669; --okbg:#ecfdf5; --bad:#dc2626; --badbg:#fef2f2;
+  --warn:#d97706; --warnbg:#fffbeb; --probbg:#f0f9ff; --probline:#7dd3fc;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; background:var(--bg); color:var(--ink); line-height:1.65;}
+.layout{display:flex; min-height:100vh;}
+/* ---------- Sidebar ---------- */
+.sidebar{width:270px; flex-shrink:0; background:var(--card); border-right:1px solid var(--line); padding:20px 14px; position:sticky; top:0; height:100vh; overflow-y:auto;}
+.brand{padding:6px 10px 14px;}
+.brand h1{font-size:17px; font-weight:800; letter-spacing:-.02em;}
+.brand h1 span{color:var(--acc);}
+.brand p{font-size:12px; color:var(--ink3); margin-top:2px;}
+.navsec{font-size:10.5px; text-transform:uppercase; letter-spacing:.09em; color:var(--ink3); font-weight:700; margin:16px 10px 6px;}
+.navitem{display:flex; align-items:center; gap:9px; padding:8px 10px; border-radius:9px; cursor:pointer; font-size:13.5px; color:var(--ink2); border:none; background:none; width:100%; text-align:left; font-family:inherit;}
+.navitem:hover{background:var(--bg);}
+.navitem.active{background:var(--acc2); color:var(--acc); font-weight:600;}
+.navnum{width:21px; height:21px; border-radius:50%; background:var(--bg); border:1.5px solid var(--line); font-size:10.5px; display:flex; align-items:center; justify-content:center; font-weight:700; color:var(--ink3); flex-shrink:0;}
+.navitem.active .navnum{border-color:var(--acc); color:var(--acc); background:var(--acc2);}
+.navnum.done{background:var(--ok); border-color:var(--ok); color:#fff;}
+.navlabel{flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+/* ---------- Main ---------- */
+.main{flex:1; min-width:0; padding:34px 44px 90px; max-width:980px; margin:0 auto;}
+.crumb{font-size:12px; color:var(--ink3); font-weight:600; text-transform:uppercase; letter-spacing:.07em; margin-bottom:6px;}
+h2.pagetitle{font-size:27px; font-weight:800; letter-spacing:-.02em; margin-bottom:4px;}
+.pagesub{color:var(--ink2); font-size:14.5px; margin-bottom:26px;}
+.card{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:24px 26px; margin-bottom:18px;}
+.lesson h3{font-size:18px; font-weight:750; margin:26px 0 10px; letter-spacing:-.01em;}
+.lesson h3:first-child{margin-top:0;}
+.lesson h4{font-size:15px; font-weight:700; margin:18px 0 8px;}
+.lesson p{margin:10px 0; font-size:15px; color:var(--ink);}
+.lesson ul,.lesson ol{margin:10px 0 10px 22px; font-size:15px;}
+.lesson li{margin:5px 0;}
+.lesson .katex{font-size:1.04em;}
+.eq{text-align:center; margin:14px 0; overflow-x:auto; padding:4px 0;}
+/* boxes */
+.ex{background:var(--bg); border:1px solid var(--line); border-left:4px solid var(--acc); border-radius:10px; padding:14px 18px; margin:14px 0;}
+.ex .extag{font-size:11px; font-weight:800; color:var(--acc); text-transform:uppercase; letter-spacing:.08em; margin-bottom:4px;}
+.prob{background:var(--probbg); border:1px solid var(--probline); border-radius:10px; padding:14px 18px; margin:16px 0;}
+.prob .extag{font-size:11px; font-weight:800; color:#0369a1; text-transform:uppercase; letter-spacing:.08em; margin-bottom:4px;}
+.warnbox{background:var(--warnbg); border:1px solid #fcd34d; border-radius:10px; padding:12px 16px; margin:14px 0; font-size:14px;}
+.keybox{background:var(--acc2); border:1px solid var(--acc3); border-radius:10px; padding:13px 18px; margin:14px 0;}
+.keybox .extag{font-size:11px; font-weight:800; color:var(--acc); text-transform:uppercase; letter-spacing:.08em; margin-bottom:4px;}
+details.sol{margin-top:10px;}
+details.sol summary{cursor:pointer; font-weight:600; color:var(--acc); font-size:13.5px; user-select:none;}
+details.sol[open] summary{margin-bottom:6px;}
+details.sol .solbody{background:#fff; border:1px solid var(--line); border-radius:8px; padding:12px 15px; font-size:14.5px;}
+/* quiz */
+.qq{margin:0 0 22px;}
+.qq .qtext{font-weight:600; font-size:15px; margin-bottom:10px;}
+.opts{display:flex; flex-direction:column; gap:8px;}
+.opt{border:1.5px solid var(--line); background:var(--card); border-radius:9px; padding:10px 14px; text-align:left; cursor:pointer; font-size:14.5px; font-family:inherit; color:var(--ink); transition:border-color .12s;}
+.opt:hover{border-color:var(--acc3);}
+.opt.sel-ok{border-color:var(--ok); background:var(--okbg); font-weight:600;}
+.opt.sel-bad{border-color:var(--bad); background:var(--badbg);}
+.opt.reveal{border-color:var(--ok); background:var(--okbg);}
+.opt:disabled{cursor:default; opacity:.92;}
+.expl{display:none; margin-top:9px; font-size:13.5px; background:var(--bg); border-radius:8px; padding:10px 13px; color:var(--ink2);}
+.expl.show{display:block;}
+.quizfoot{display:flex; align-items:center; gap:14px; margin-top:6px; flex-wrap:wrap;}
+.score{font-weight:700; font-size:14.5px;}
+.scorebadge{display:inline-block; padding:3px 12px; border-radius:999px; font-size:12.5px; font-weight:700;}
+.pass{background:var(--okbg); color:var(--ok);}
+.fail{background:var(--warnbg); color:var(--warn);}
+/* drills */
+.drill{border:1px solid var(--line); border-radius:10px; padding:14px 17px; margin-bottom:14px; background:var(--card);}
+.drill .dq{font-weight:600; font-size:15px; margin-bottom:9px;}
+.drillrow{display:flex; gap:8px; flex-wrap:wrap; align-items:center;}
+.drill input[type=text]{border:1.5px solid var(--line); border-radius:8px; padding:8px 12px; font-size:14.5px; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; width:190px; outline:none;}
+.drill input[type=text]:focus{border-color:var(--acc);}
+.drill input.ok{border-color:var(--ok); background:var(--okbg);}
+.drill input.bad{border-color:var(--bad); background:var(--badbg);}
+.dmark{font-size:13px; font-weight:700; min-width:70px;}
+.dmark.ok{color:var(--ok);} .dmark.bad{color:var(--bad);}
+.hinttag{font-size:12px; color:var(--ink3); margin-top:6px;}
+/* buttons */
+.btn{background:var(--acc); color:#fff; border:none; border-radius:9px; padding:9px 18px; font-size:14px; font-weight:600; cursor:pointer; font-family:inherit;}
+.btn:hover{filter:brightness(1.08);}
+.btn.ghost{background:var(--card); color:var(--acc); border:1.5px solid var(--acc3);}
+.btn.small{padding:7px 13px; font-size:13px;}
+/* tabs inside module */
+.mtabs{display:flex; gap:8px; margin-bottom:20px; flex-wrap:wrap;}
+.mtab{border:1.5px solid var(--line); background:var(--card); padding:7px 16px; border-radius:999px; font-size:13.5px; font-weight:600; cursor:pointer; color:var(--ink2); font-family:inherit;}
+.mtab.active{background:var(--acc); border-color:var(--acc); color:#fff;}
+.mtab .cnt{opacity:.7; font-weight:500;}
+/* dashboard */
+.statgrid{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:14px; margin-bottom:18px;}
+.stat{background:var(--card); border:1px solid var(--line); border-radius:12px; padding:16px 18px;}
+.stat .big{font-size:26px; font-weight:800; letter-spacing:-.02em;}
+.stat .lbl{font-size:12px; color:var(--ink3); font-weight:600; margin-top:2px;}
+.pbar{height:9px; background:var(--line); border-radius:999px; overflow:hidden; margin-top:8px;}
+.pbar>div{height:100%; background:var(--acc); border-radius:999px; transition:width .3s;}
+.modrow{display:flex; align-items:center; gap:14px; padding:13px 4px; border-bottom:1px solid var(--line); cursor:pointer;}
+.modrow:last-child{border-bottom:none;}
+.modrow:hover .mrtitle{color:var(--acc);}
+.mrtitle{font-weight:650; font-size:14.5px;}
+.mrsub{font-size:12.5px; color:var(--ink3);}
+.mrright{margin-left:auto; display:flex; align-items:center; gap:10px; flex-shrink:0;}
+.chip{font-size:11.5px; font-weight:700; padding:2px 10px; border-radius:999px;}
+.chip.todo{background:var(--bg); color:var(--ink3);}
+.chip.part{background:var(--warnbg); color:var(--warn);}
+.chip.done{background:var(--okbg); color:var(--ok);}
+/* plan */
+.week{background:var(--card); border:1px solid var(--line); border-radius:12px; padding:16px 20px; margin-bottom:12px; display:flex; gap:16px; align-items:flex-start;}
+.week.current{border-color:var(--acc); box-shadow:0 0 0 3px var(--acc2);}
+.wknum{background:var(--acc2); color:var(--acc); font-weight:800; border-radius:10px; padding:8px 12px; font-size:13px; text-align:center; flex-shrink:0; min-width:64px;}
+.wknum small{display:block; font-weight:600; font-size:10.5px; color:var(--ink3);}
+.wkbody{flex:1;}
+.wkbody h4{font-size:15px; font-weight:700;}
+.wkbody p{font-size:13.5px; color:var(--ink2); margin-top:3px;}
+.wkcheck{display:flex; align-items:center; gap:7px; margin-top:9px; font-size:13px; color:var(--ink2); cursor:pointer; user-select:none;}
+.wkcheck input{accent-color:var(--acc); width:16px; height:16px; cursor:pointer;}
+/* reference */
+.refgrid{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+.refcard{background:var(--card); border:1px solid var(--line); border-radius:12px; padding:16px 19px;}
+.refcard h4{font-size:13px; font-weight:800; color:var(--acc); text-transform:uppercase; letter-spacing:.06em; margin-bottom:8px;}
+.refcard .rline{font-size:14px; padding:5px 0; border-bottom:1px dashed var(--line);}
+.refcard .rline:last-child{border-bottom:none;}
+.printbtn{margin-bottom:16px;}
+/* misc */
+.next{display:flex; justify-content:space-between; gap:10px; margin-top:26px;}
+.tablewrap{overflow-x:auto; margin:12px 0;}
+table.nice{border-collapse:collapse; width:100%; font-size:14px;}
+table.nice th{background:var(--bg); text-align:left; padding:8px 12px; border:1px solid var(--line); font-size:12.5px; text-transform:uppercase; letter-spacing:.04em; color:var(--ink2);}
+table.nice td{padding:8px 12px; border:1px solid var(--line);}
+.footer-note{color:var(--ink3); font-size:12.5px; margin-top:30px; text-align:center;}
+/* videos */
+.vid{display:flex; gap:16px; border:1px solid var(--line); border-radius:12px; padding:14px; margin-bottom:14px; background:var(--card); flex-wrap:wrap;}
+.vthumb{position:relative; width:300px; max-width:100%; aspect-ratio:16/9; border-radius:9px; background-size:cover; background-position:center; cursor:pointer; flex-shrink:0; overflow:hidden; background-color:#000;}
+.vplay{position:absolute; inset:0; margin:auto; width:60px; height:42px; border:none; border-radius:10px; background:rgba(0,0,0,.72); color:#fff; font-size:16px; cursor:pointer; transition:transform .15s, background .15s;}
+.vthumb:hover .vplay{transform:scale(1.1); background:#e11;}
+.vframe{width:300px; max-width:100%; aspect-ratio:16/9; border-radius:9px; border:none; flex-shrink:0;}
+.vmeta{flex:1; min-width:210px;}
+.vtitle{font-weight:700; font-size:14.5px; line-height:1.4;}
+.vsub{font-size:12.5px; color:var(--ink3); margin:3px 0 6px;}
+.vnote{font-size:13.5px; color:var(--ink2);}
+.vlink{font-size:12.5px; color:var(--acc); text-decoration:none; font-weight:600; display:inline-block; margin-top:7px;}
+.vlink:hover{text-decoration:underline;}
+@media (max-width:900px){
+  .layout{flex-direction:column;}
+  .sidebar{width:100%; height:auto; position:static; display:flex; overflow-x:auto; padding:10px; gap:4px; border-right:none; border-bottom:1px solid var(--line);}
+  .brand{display:none;}
+  .navsec{display:none;}
+  .navitem{width:auto; white-space:nowrap; flex-shrink:0;}
+  .main{padding:22px 18px 70px;}
+  .refgrid{grid-template-columns:1fr;}
+}
+@media print{
+  .sidebar,.mtabs,.next,.btn,.printbtn{display:none !important;}
+  .main{padding:0; max-width:100%;}
+  body{background:#fff;}
+  .card,.refcard{border:1px solid #ccc; break-inside:avoid;}
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  <nav class="sidebar" id="sidebar"></nav>
+  <main class="main" id="main"></main>
+</div>
+<script>
+"use strict";
+/* ================= state ================= */
+var store = {visited:{}, quizBest:{}, drillsOk:{}, weeks:{}, tab:{}};
+try{
+  var raw = localStorage.getItem("calcprob_v1");
+  if(raw){ store = Object.assign(store, JSON.parse(raw)); }
+}catch(e){ /* in-memory fallback */ }
+function save(){ try{ localStorage.setItem("calcprob_v1", JSON.stringify(store)); }catch(e){} }
+
+function esc(s){ return s.replace(/&/g,"&amp;").replace(/</g,"&lt;"); }
+function mathify(el){
+  if(window.renderMathInElement){
+    renderMathInElement(el, {delimiters:[
+      {left:"$$", right:"$$", display:true},
+      {left:"$", right:"$", display:false}
+    ], throwOnError:false});
+  }
+}
+/* answer normalization for drills */
+function norm(s){
+  return (s||"").toLowerCase().replace(/\s+/g,"").replace(/\*/g,"").replace(/·/g,"")
+    .replace(/−/g,"-").replace(/\((\w)\)/g,"$1");
+}
+function numval(s){
+  s = (s||"").trim().replace(/\s+/g,"").replace(/−/g,"-");
+  if(/^-?\d+\/-?\d+$/.test(s)){ var p=s.split("/"); return parseFloat(p[0])/parseFloat(p[1]); }
+  if(/^-?(\d+\.?\d*|\.\d+)$/.test(s)){ return Number(s); }
+  return null; /* reject partial parses like "1/e" or "1x" */
+}
+function checkAnswer(drill, val){
+  var n = norm(val);
+  if(!n) return false;
+  for(var i=0;i<drill.accept.length;i++){ if(norm(drill.accept[i])===n) return true; }
+  if(typeof drill.num === "number"){
+    var v = numval(val);
+    if(v===null) return false;
+    if(Number.isInteger(drill.num)) return v === drill.num;      /* integers: exact */
+    return Math.abs(v-drill.num) <= Math.max(0.011, Math.abs(drill.num)*0.005); /* decimals: forgiving rounding */
+  }
+  return false;
+}
+</script>
+<script>
+"use strict";
+var R = String.raw;
+var MODULES = [
+/* ============================================================ M0 */
+{
+id:"m0", title:"Foundations: Algebra & Precalc Refresher", short:"Foundations",
+sub:"Functions, exponents, logarithms, e, factorials, and summation notation — the language everything else is written in.",
+week:"Week 1",
+lesson: R`
+<h3>1. Functions</h3>
+<p>A <b>function</b> is a rule that takes an input and produces exactly one output. We write $f(x) = x^2$ to mean "the function $f$ takes $x$ and returns $x^2$." So $f(3) = 9$ and $f(-2) = 4$.</p>
+<p>Think of it as a machine: number in, number out. In your probability course, functions are everywhere — a <i>probability density function</i> $f(x)$ tells you how likely values near $x$ are, and a <i>cumulative distribution function</i> $F(x)$ tells you the probability of getting a value $\le x$.</p>
+<div class="ex"><div class="extag">Example</div>
+<p>If $f(x) = 2x + 1$, then $f(0)=1$, $f(5)=11$, and $f(a+1) = 2(a+1)+1 = 2a+3$. You substitute the input <i>everywhere</i> $x$ appears.</p></div>
+
+<h3>2. Exponent rules</h3>
+<p>These five rules must be automatic:</p>
+<div class="eq">$$x^a \cdot x^b = x^{a+b} \qquad \frac{x^a}{x^b} = x^{a-b} \qquad (x^a)^b = x^{ab}$$</div>
+<div class="eq">$$x^{-a} = \frac{1}{x^a} \qquad x^{1/2} = \sqrt{x}$$</div>
+<p>Two special cases: $x^0 = 1$ (anything nonzero to the 0 power is 1) and $x^1 = x$.</p>
+<div class="ex"><div class="extag">Example</div>
+<p>Rewrite $\dfrac{1}{x^3}$ as a power: it's $x^{-3}$. Rewrite $\sqrt{x^5}$: it's $x^{5/2}$. This skill matters because the differentiation rules you'll learn work on <i>powers</i> — so you convert roots and fractions into powers first.</p></div>
+
+<h3>3. The number $e$ and exponential functions</h3>
+<p>$e \approx 2.71828$ is a special constant, as fundamental as $\pi$. The function $e^x$ (also written $\exp(x)$) is <b>the</b> most important function in probability. Facts to know:</p>
+<ul>
+<li>$e^x$ is always positive, for every $x$.</li>
+<li>$e^0 = 1$, and $e^{a+b} = e^a e^b$ (normal exponent rules apply).</li>
+<li>As $x \to \infty$, $e^x$ blows up; as $x \to -\infty$, $e^x \to 0$. So $e^{-x}$ <i>decays to zero</i> as $x$ grows.</li>
+</ul>
+<div class="prob"><div class="extag">Why this matters for probability</div>
+<p>The exponential distribution ($f(x)=\lambda e^{-\lambda x}$), the Poisson distribution ($e^{-\lambda}\lambda^k/k!$), and the normal/bell curve ($e^{-x^2/2}$) are all built from $e$. Half of Ross Chapter 5 is manipulating $e^{-\text{something}}$.</p></div>
+
+<h3>4. Logarithms</h3>
+<p>The natural logarithm $\ln(x)$ is the <i>inverse</i> of $e^x$: it answers "$e$ to what power gives $x$?" So $\ln(e^3)=3$ and $e^{\ln 5} = 5$. Key rules:</p>
+<div class="eq">$$\ln(ab) = \ln a + \ln b \qquad \ln\!\left(\frac{a}{b}\right) = \ln a - \ln b \qquad \ln(a^k) = k\ln a$$</div>
+<p>Also: $\ln(1) = 0$, $\ln(e)=1$, and $\ln(x)$ is only defined for $x > 0$.</p>
+<div class="ex"><div class="extag">Example</div>
+<p>Solve $e^{-2x} = 0.5$. Take $\ln$ of both sides: $-2x = \ln(0.5) \approx -0.693$, so $x \approx 0.347$. (You'll do exactly this to find medians of exponential random variables.)</p></div>
+
+<h3>5. Factorials and counting</h3>
+<p>$n!$ ("n factorial") means $n \times (n-1) \times \cdots \times 2 \times 1$. So $4! = 24$. By convention, $0! = 1$. The <b>binomial coefficient</b></p>
+<div class="eq">$$\binom{n}{k} = \frac{n!}{k!\,(n-k)!}$$</div>
+<p>counts the number of ways to choose $k$ items from $n$. Example: $\binom{5}{2} = \frac{120}{2\cdot 6} = 10$.</p>
+<div class="prob"><div class="extag">Why this matters for probability</div>
+<p>Your course starts (Sept 2, Chapter 1) with combinatorial analysis — it is built entirely on factorials and $\binom{n}{k}$. This is the one topic you'll need on day one.</p></div>
+
+<h3>6. Summation notation</h3>
+<p>$\displaystyle\sum_{k=1}^{n} a_k$ means "add up $a_k$ for $k = 1, 2, \ldots, n$." For example:</p>
+<div class="eq">$$\sum_{k=1}^{4} k^2 = 1 + 4 + 9 + 16 = 30$$</div>
+<p>The index can start anywhere (often $k=0$ in probability). Two sums you'll see constantly:</p>
+<ul>
+<li>$\displaystyle\sum_{k=1}^{n} k = \frac{n(n+1)}{2}$ &nbsp;(sum of first $n$ integers)</li>
+<li>$\displaystyle\sum_{k=0}^{\infty} x^k = \frac{1}{1-x}$ for $|x|<1$ &nbsp;(geometric series — Module 8 covers this properly)</li>
+</ul>
+<div class="keybox"><div class="extag">Bottom line</div>
+<p>Before moving on you should be able to: rewrite roots/fractions as powers, manipulate $e^x$ and $\ln x$ fluently, compute $\binom{n}{k}$, and unpack a $\Sigma$.</p></div>
+`,
+quiz:[
+{q:R`Simplify $x^3 \cdot x^{-5}$.`, opts:[R`$x^{-2} = 1/x^2$`, R`$x^{-15}$`, R`$x^{2}$`, R`$x^{8}$`], c:0, expl:R`Multiplying powers adds exponents: $3 + (-5) = -2$, and $x^{-2} = 1/x^2$.`},
+{q:R`What is $\ln(e^7)$?`, opts:[R`$7$`, R`$e^7$`, R`$1$`, R`$7e$`], c:0, expl:R`$\ln$ undoes $e^x$: $\ln(e^7) = 7$.`},
+{q:R`As $x \to \infty$, what happens to $e^{-x}$?`, opts:[R`It approaches $0$`, R`It grows without bound`, R`It approaches $1$`, R`It approaches $-\infty$`], c:0, expl:R`$e^{-x} = 1/e^x$, and $e^x$ blows up, so the fraction shrinks to 0. This fact is used in nearly every improper integral in probability.`},
+{q:R`Compute $\binom{6}{2}$.`, opts:[R`$15$`, R`$30$`, R`$12$`, R`$720$`], c:0, expl:R`$\binom{6}{2} = \frac{6!}{2!\,4!} = \frac{720}{2 \cdot 24} = 15$.`},
+{q:R`What is $\displaystyle\sum_{k=0}^{3} 2^k$?`, opts:[R`$15$`, R`$14$`, R`$8$`, R`$7$`], c:0, expl:R`$2^0 + 2^1 + 2^2 + 2^3 = 1+2+4+8 = 15$. Don't forget the $k=0$ term!`},
+{q:R`Rewrite $\ln(x^2 y)$ using log rules (assume $x,y>0$).`, opts:[R`$2\ln x + \ln y$`, R`$2\ln x \cdot \ln y$`, R`$\ln(2x) + \ln y$`, R`$(\ln x)^2 + \ln y$`], c:0, expl:R`$\ln(ab) = \ln a + \ln b$ and $\ln(x^2) = 2\ln x$.`}
+],
+drills:[
+{q:R`Write $\dfrac{1}{\sqrt{x}}$ as a single power $x^p$. Enter the exponent $p$.`, accept:["-1/2","-0.5"], num:-0.5, hint:"√x = x^(1/2), and 1/x^a = x^(−a).", sol:R`$\frac{1}{\sqrt{x}} = \frac{1}{x^{1/2}} = x^{-1/2}$, so $p = -\tfrac{1}{2}$.`},
+{q:R`Compute $5!$`, accept:["120"], num:120, hint:"5·4·3·2·1", sol:R`$5! = 5\cdot4\cdot3\cdot2\cdot1 = 120$.`},
+{q:R`Compute $\binom{8}{3}$.`, accept:["56"], num:56, hint:"8!/(3!·5!) — cancel the 5! first.", sol:R`$\binom{8}{3} = \frac{8\cdot7\cdot6}{3\cdot2\cdot1} = \frac{336}{6} = 56$.`},
+{q:R`Simplify $e^{2}\, e^{3}$ as $e$ to a single power. Enter the exponent.`, accept:["5"], num:5, hint:"Add exponents.", sol:R`$e^2 e^3 = e^{2+3} = e^5$.`},
+{q:R`Solve for $x$: $\ln(x) = 2$. (Answer in terms of $e$, e.g. type e^2, or as a decimal.)`, accept:["e^2","e^(2)"], num:7.389, hint:"Exponentiate both sides.", sol:R`Apply $e^{(\cdot)}$ to both sides: $x = e^2 \approx 7.389$.`},
+{q:R`Compute $\displaystyle\sum_{k=1}^{100} k$ using the formula.`, accept:["5050"], num:5050, hint:"n(n+1)/2 with n = 100.", sol:R`$\frac{100 \cdot 101}{2} = 5050$.`},
+{q:R`If $f(x) = x^2 - 3x$, compute $f(4)$.`, accept:["4"], num:4, hint:"Substitute 4 everywhere x appears.", sol:R`$f(4) = 16 - 12 = 4$.`}
+]
+},
+/* ============================================================ M1 */
+{
+id:"m1", title:"Limits", short:"Limits",
+sub:"What a function approaches. The concept underneath derivatives, integrals, L'Hôpital, and every limit theorem in Chapter 8.",
+week:"Week 2",
+lesson: R`
+<h3>1. The idea</h3>
+<p>The <b>limit</b> of $f(x)$ as $x$ approaches $a$, written $\displaystyle\lim_{x\to a} f(x)$, is the value $f(x)$ gets close to as $x$ gets close to $a$ — regardless of what happens exactly <i>at</i> $a$.</p>
+<div class="ex"><div class="extag">Example</div>
+<p>$\displaystyle\lim_{x \to 2}\; (3x+1) = 7$. As $x$ sneaks up on 2, the output sneaks up on 7. Here you can just plug in $x=2$ — and for "nice" (continuous) functions, plugging in is always step one.</p></div>
+
+<h3>2. When plugging in fails: the $\frac{0}{0}$ situation</h3>
+<p>Consider $\displaystyle\lim_{x\to 3} \frac{x^2-9}{x-3}$. Plugging in gives $\frac{0}{0}$ — <b>undefined, but not a dead end</b>. It means "do more work." Factor:</p>
+<div class="eq">$$\frac{x^2-9}{x-3} = \frac{(x-3)(x+3)}{x-3} = x+3 \quad (x \ne 3)$$</div>
+<p>So the limit is $3 + 3 = 6$. Near $x=3$ (but not at it), the function <i>is</i> $x+3$, and $x+3 \to 6$.</p>
+<div class="warnbox"><b>Key mindset:</b> $\frac{0}{0}$ is called an <i>indeterminate form</i>. It doesn't have one fixed answer — the answer depends on the particular functions racing to zero. Module 4 gives you a power tool (L'Hôpital's rule) for these.</div>
+
+<h3>3. Limits at infinity</h3>
+<p>$\displaystyle\lim_{x\to\infty} f(x)$ asks: where does $f$ settle as $x$ grows forever? The essentials:</p>
+<ul>
+<li>$\displaystyle\lim_{x\to\infty} \frac{1}{x} = 0$, and more generally $\dfrac{c}{x^p} \to 0$ for any power $p>0$.</li>
+<li>$\displaystyle\lim_{x\to\infty} e^{-x} = 0$ — exponential decay dies.</li>
+<li>$e^x$ beats any power: $\displaystyle\lim_{x\to\infty} \frac{x^{100}}{e^x} = 0$. Exponentials always win the race.</li>
+</ul>
+<div class="ex"><div class="extag">Example: ratio of polynomials</div>
+<p>$\displaystyle\lim_{x\to\infty} \frac{3x^2+5x}{2x^2+7}$. Divide top and bottom by $x^2$ (the highest power): $\dfrac{3 + 5/x}{2 + 7/x^2} \to \dfrac{3+0}{2+0} = \dfrac{3}{2}$. Rule of thumb: same degree → ratio of leading coefficients.</p></div>
+
+<h3>4. A limit that defines $e$</h3>
+<div class="eq">$$\lim_{n\to\infty}\left(1 + \frac{x}{n}\right)^{\!n} = e^x$$</div>
+<p>Memorize this one. With $x = -\lambda$: $\left(1-\frac{\lambda}{n}\right)^n \to e^{-\lambda}$.</p>
+<div class="prob"><div class="extag">Why this matters for probability</div>
+<p>This limit is <i>exactly</i> how the Poisson distribution arises from the binomial (Ross Ch. 4), and it reappears in Chapter 8's limit theorems. When your professor writes $\left(1-\frac{\lambda}{n}\right)^n \approx e^{-\lambda}$ on the board, this is what's happening.</p></div>
+
+<h3>5. Continuity (the two-sentence version)</h3>
+<p>A function is <b>continuous</b> at $a$ if $\lim_{x\to a} f(x) = f(a)$ — no jump, no hole, no blow-up; you can draw it without lifting your pen. Polynomials, $e^x$, $\ln x$ (for $x>0$), and their sums/products/compositions are all continuous, which is why "just plug in" usually works.</p>
+<div class="prob"><div class="extag">Why this matters for probability</div>
+<p>A cumulative distribution function $F(x)$ satisfies $\lim_{x\to-\infty}F(x) = 0$ and $\lim_{x\to\infty}F(x) = 1$ — those are literally limit statements, and Ross uses them from Chapter 4 onward.</p></div>
+`,
+quiz:[
+{q:R`$\displaystyle\lim_{x\to 4}(x^2 - 2x) = \,?$`, opts:[R`$8$`, R`$16$`, R`$0$`, R`Does not exist`], c:0, expl:R`Polynomials are continuous — plug in: $16 - 8 = 8$.`},
+{q:R`$\displaystyle\lim_{x\to 5}\frac{x^2-25}{x-5} = \,?$`, opts:[R`$10$`, R`$0$`, R`$\frac{0}{0}$, so it doesn't exist`, R`$25$`], c:0, expl:R`Factor: $\frac{(x-5)(x+5)}{x-5} = x+5 \to 10$. A $\frac{0}{0}$ form means "keep working," not "no answer."`},
+{q:R`$\displaystyle\lim_{x\to\infty}\frac{5x^3 + x}{10x^3 - 4} = \,?$`, opts:[R`$\tfrac{1}{2}$`, R`$0$`, R`$\infty$`, R`$\tfrac{5}{4}$`], c:0, expl:R`Same degree top and bottom → ratio of leading coefficients: $5/10 = 1/2$.`},
+{q:R`$\displaystyle\lim_{x\to\infty} x^2 e^{-x} = \,?$`, opts:[R`$0$`, R`$\infty$`, R`$1$`, R`$e$`], c:0, expl:R`Exponential decay beats polynomial growth: $x^2/e^x \to 0$. (Module 4 proves this with L'Hôpital.)`},
+{q:R`$\displaystyle\lim_{n\to\infty}\left(1 - \frac{2}{n}\right)^{\!n} = \,?$`, opts:[R`$e^{-2}$`, R`$1$`, R`$0$`, R`$e^{2}$`], c:0, expl:R`This is the $e$-limit with $x = -2$: the answer is $e^{-2} \approx 0.135$. Key to deriving the Poisson distribution.`},
+{q:R`If $F$ is a CDF, $\displaystyle\lim_{x\to\infty} F(x) = \,?$`, opts:[R`$1$`, R`$0$`, R`$\infty$`, R`Depends on the distribution`], c:0, expl:R`Total probability is 1: as $x \to \infty$, the event $\{X \le x\}$ becomes certain. True for every CDF.`}
+],
+drills:[
+{q:R`$\displaystyle\lim_{x\to 3}(2x + 1)$`, accept:["7"], num:7, hint:"Continuous — plug in.", sol:R`$2(3)+1 = 7$.`},
+{q:R`$\displaystyle\lim_{x\to 2}\dfrac{x^2 - 4}{x - 2}$`, accept:["4"], num:4, hint:"Factor the top as (x−2)(x+2).", sol:R`$\frac{(x-2)(x+2)}{x-2} = x+2 \to 4$.`},
+{q:R`$\displaystyle\lim_{x\to\infty}\dfrac{7}{x^2}$`, accept:["0"], num:0, hint:"Constant over a growing power.", sol:R`Any constant over $x^p$ ($p>0$) goes to $0$.`},
+{q:R`$\displaystyle\lim_{x\to\infty}\dfrac{2x^2+3}{4x^2+x}$ (enter as a fraction or decimal)`, accept:["1/2","0.5"], num:0.5, hint:"Compare leading terms.", sol:R`Divide by $x^2$: $\frac{2 + 3/x^2}{4 + 1/x} \to \frac{2}{4} = \frac12$.`},
+{q:R`$\displaystyle\lim_{x\to\infty} 5e^{-x} + 3$`, accept:["3"], num:3, hint:"What does e^(−x) do?", sol:R`$e^{-x} \to 0$, so the limit is $0 + 3 = 3$.`},
+{q:R`$\displaystyle\lim_{n\to\infty}\left(1 + \frac{1}{n}\right)^{\!n}$ (type e or a decimal ≈)`, accept:["e","e^1"], num:2.71828, hint:"The most famous limit in this module.", sol:R`This is the definition of $e \approx 2.71828$.`}
+]
+},
+/* ============================================================ M2 */
+{
+id:"m2", title:"Derivatives I: Concept & Power Rule", short:"Derivatives I",
+sub:"The derivative measures how fast a function changes. Here you learn what it means and how to differentiate polynomials.",
+week:"Week 3",
+lesson: R`
+<h3>1. What a derivative is</h3>
+<p>The <b>derivative</b> of $f$ at a point measures the <b>instantaneous rate of change</b> — the slope of the graph at that exact point. Notation: $f'(x)$ (say "f prime") or $\dfrac{df}{dx}$. Both mean the same thing.</p>
+<p>Formally, it's a limit (this is why we learned limits first):</p>
+<div class="eq">$$f'(x) = \lim_{h \to 0} \frac{f(x+h) - f(x)}{h}$$</div>
+<p>Read it as: the change in output over the change in input — "rise over run" — as the run $h$ shrinks to zero. Average slope over a tiny interval becomes the exact slope at a point.</p>
+<div class="ex"><div class="extag">Example: seeing it once by hand</div>
+<p>Let $f(x) = x^2$. Then
+$$\frac{f(x+h)-f(x)}{h} = \frac{(x+h)^2 - x^2}{h} = \frac{2xh + h^2}{h} = 2x + h$$
+As $h \to 0$ this becomes $2x$. So $(x^2)' = 2x$: at $x=3$ the parabola climbs with slope 6. You'll never need to do this limit computation again — the rules below package it — but it's what "derivative" <i>means</i>.</p></div>
+
+<h3>2. The power rule</h3>
+<div class="keybox"><div class="extag">Power rule</div>
+<p>$$\frac{d}{dx}\, x^n = n\,x^{n-1} \qquad \text{for any real } n$$</p></div>
+<p>Bring the exponent down front, knock the exponent down by one. Examples:</p>
+<ul>
+<li>$(x^5)' = 5x^4$</li>
+<li>$(x)' = 1$ &nbsp;and&nbsp; $(c)' = 0$ for any constant $c$ (a flat line has slope 0)</li>
+<li>$(\sqrt{x})' = (x^{1/2})' = \tfrac12 x^{-1/2} = \dfrac{1}{2\sqrt{x}}$</li>
+<li>$\left(\dfrac{1}{x}\right)' = (x^{-1})' = -x^{-2} = -\dfrac{1}{x^2}$</li>
+</ul>
+<p>Those last two show why Module 0's "rewrite as a power" skill matters.</p>
+
+<h3>3. Sums and constant multiples</h3>
+<p>Derivatives are taken term by term, and constants ride along:</p>
+<div class="eq">$$(f + g)' = f' + g' \qquad (c\,f)' = c\,f'$$</div>
+<div class="ex"><div class="extag">Example</div>
+<p>$f(x) = 4x^3 - 7x^2 + 2x - 9$. Differentiate each term:
+$$f'(x) = 12x^2 - 14x + 2$$
+(The $-9$ vanishes — constants have zero slope.)</p></div>
+
+<h3>4. Reading a derivative</h3>
+<ul>
+<li>$f'(x) > 0$: function is <b>increasing</b> at $x$ (graph going uphill).</li>
+<li>$f'(x) < 0$: function is <b>decreasing</b>.</li>
+<li>$f'(x) = 0$: momentarily flat — a candidate for a peak or valley (Module 4 uses this to find maxima).</li>
+</ul>
+<div class="ex"><div class="extag">Example</div>
+<p>$f(x) = x^2 - 6x$ has $f'(x) = 2x - 6$, which is zero at $x = 3$, negative before, positive after. So $f$ decreases until $x=3$, bottoms out, then increases: $x=3$ is a minimum.</p></div>
+<div class="prob"><div class="extag">Why this matters for probability</div>
+<p>Two big uses in your course: (1) the density is the derivative of the CDF, $f(x) = F'(x)$ — Ross Chapter 5 uses this constantly; (2) finding the most likely value (mode) of a distribution means setting a derivative to zero.</p></div>
+`,
+quiz:[
+{q:R`$\dfrac{d}{dx}\,x^7 = \,?$`, opts:[R`$7x^6$`, R`$x^6$`, R`$7x^8$`, R`$6x^7$`], c:0, expl:R`Power rule: bring 7 down, reduce exponent to 6.`},
+{q:R`If $f(x) = 5$, what is $f'(x)$?`, opts:[R`$0$`, R`$5$`, R`$1$`, R`$5x$`], c:0, expl:R`A constant function is a flat line — slope 0 everywhere.`},
+{q:R`$\dfrac{d}{dx}\left(3x^4 - x + 2\right) = \,?$`, opts:[R`$12x^3 - 1$`, R`$12x^3 - x$`, R`$12x^3 + 2$`, R`$3x^3 - 1$`], c:0, expl:R`Term by term: $12x^3 - 1 + 0$.`},
+{q:R`$\dfrac{d}{dx}\,\dfrac{1}{x^2} = \,?$`, opts:[R`$-\dfrac{2}{x^3}$`, R`$\dfrac{1}{2x}$`, R`$-\dfrac{1}{x^3}$`, R`$\dfrac{2}{x}$`], c:0, expl:R`Rewrite as $x^{-2}$, then power rule: $-2x^{-3} = -2/x^3$.`},
+{q:R`$f'(a) = 0$ and $f'$ goes from positive to negative at $a$. What's happening at $a$?`, opts:[R`$f$ has a local maximum`, R`$f$ has a local minimum`, R`$f$ is increasing`, R`$f$ must equal zero`], c:0, expl:R`Uphill, flat, then downhill — that's a peak. This is exactly how you find modes of densities.`},
+{q:R`The derivative $f'(x)$ is best described as:`, opts:[R`The instantaneous rate of change (slope) of $f$ at $x$`, R`The area under $f$ up to $x$`, R`The average value of $f$`, R`The largest value of $f$`], c:0, expl:R`Slope/rate of change. (Area under the curve is the <i>integral</i> — Module 5.)`}
+],
+drills:[
+{q:R`Differentiate $f(x) = x^{10}$. (Type like: 10x^9)`, accept:["10x^9"], hint:"Power rule.", sol:R`$f'(x) = 10x^9$.`},
+{q:R`Differentiate $f(x) = 6x^2$.`, accept:["12x"], hint:"Constant multiple rides along: 6·2x.", sol:R`$f'(x) = 6 \cdot 2x = 12x$.`},
+{q:R`Differentiate $f(x) = x^3 - 5x$. (Type like: 3x^2-5)`, accept:["3x^2-5","-5+3x^2"], hint:"Term by term.", sol:R`$f'(x) = 3x^2 - 5$.`},
+{q:R`Differentiate $f(x) = \sqrt{x}$, then evaluate $f'(4)$. Enter the number.`, accept:["1/4","0.25"], num:0.25, hint:"√x = x^(1/2); derivative is 1/(2√x).", sol:R`$f'(x) = \frac{1}{2\sqrt{x}}$, so $f'(4) = \frac{1}{2\cdot 2} = \frac14$.`},
+{q:R`$f(x) = 2x^3 - 3x^2$. Compute $f'(2)$.`, accept:["12"], num:12, hint:"Differentiate first, then plug in 2.", sol:R`$f'(x) = 6x^2 - 6x$, so $f'(2) = 24 - 12 = 12$.`},
+{q:R`$f(x) = x^2 - 8x + 3$. At what value of $x$ is $f'(x) = 0$?`, accept:["4"], num:4, hint:"Set 2x − 8 = 0.", sol:R`$f'(x) = 2x - 8 = 0 \Rightarrow x = 4$.`}
+]
+},
+/* ============================================================ M3 */
+{
+id:"m3", title:"Derivatives II: e, ln, Product, Quotient & Chain Rule", short:"Derivatives II",
+sub:"The rules your syllabus explicitly names: product rule and chain rule, plus the derivatives of e^x and ln x.",
+week:"Week 3–4",
+lesson: R`
+<h3>1. Two derivatives to memorize cold</h3>
+<div class="keybox"><div class="extag">Memorize</div>
+<p>$$\frac{d}{dx}\,e^x = e^x \qquad\qquad \frac{d}{dx}\,\ln x = \frac{1}{x}$$</p></div>
+<p>$e^x$ is the function that is its own derivative — that's what makes $e$ special, and it's why $e$ shows up all over probability. ($\ln x$'s derivative $1/x$ assumes $x>0$.)</p>
+
+<h3>2. Product rule</h3>
+<p>The derivative of a product is <b>not</b> the product of derivatives. Instead:</p>
+<div class="keybox"><div class="extag">Product rule</div>
+<p>$$(f\,g)' = f'\,g + f\,g'$$</p></div>
+<p>"Derivative of the first times the second, plus the first times the derivative of the second."</p>
+<div class="ex"><div class="extag">Example</div>
+<p>$h(x) = x^2 e^x$. Take $f = x^2$, $g = e^x$:
+$$h'(x) = 2x\,e^x + x^2 e^x = (2x + x^2)\,e^x$$
+Factoring out $e^x$ at the end is a habit worth building — probability answers are usually left in that form.</p></div>
+
+<h3>3. Quotient rule</h3>
+<div class="keybox"><div class="extag">Quotient rule</div>
+<p>$$\left(\frac{f}{g}\right)' = \frac{f'\,g - f\,g'}{g^2}$$</p></div>
+<div class="ex"><div class="extag">Example</div>
+<p>$h(x) = \dfrac{x}{x^2+1}$: &nbsp; $h'(x) = \dfrac{1\cdot(x^2+1) - x\cdot 2x}{(x^2+1)^2} = \dfrac{1 - x^2}{(x^2+1)^2}$.</p></div>
+<p>Tip: many quotients are easier as products with negative exponents, e.g. $\frac{e^x}{x} = x^{-1}e^x$. Use whichever is cleaner.</p>
+
+<h3>4. Chain rule — the big one</h3>
+<p>For a function <i>inside</i> another function (a composition), differentiate the outside, keep the inside, then multiply by the derivative of the inside:</p>
+<div class="keybox"><div class="extag">Chain rule</div>
+<p>$$\frac{d}{dx}\, f\big(g(x)\big) = f'\big(g(x)\big)\cdot g'(x)$$</p></div>
+<p>Mantra: <b>"outside derivative × inside derivative."</b> The three patterns you'll use constantly:</p>
+<ul>
+<li>$\dfrac{d}{dx}\, e^{g(x)} = e^{g(x)}\cdot g'(x)$ &nbsp;— e.g. $\left(e^{-3x}\right)' = -3e^{-3x}$</li>
+<li>$\dfrac{d}{dx}\, [g(x)]^n = n\,[g(x)]^{n-1}\cdot g'(x)$ &nbsp;— e.g. $\left((x^2+1)^5\right)' = 5(x^2+1)^4 \cdot 2x$</li>
+<li>$\dfrac{d}{dx}\, \ln g(x) = \dfrac{g'(x)}{g(x)}$ &nbsp;— e.g. $\left(\ln(x^2+1)\right)' = \dfrac{2x}{x^2+1}$</li>
+</ul>
+<div class="ex"><div class="extag">Worked example: the bell curve</div>
+<p>Differentiate $f(x) = e^{-x^2/2}$ (the heart of the normal distribution).</p>
+<p>Outside: $e^{(\cdot)}$, whose derivative is itself. Inside: $-x^2/2$, whose derivative is $-x$. So:
+$$f'(x) = e^{-x^2/2}\cdot(-x) = -x\,e^{-x^2/2}$$
+Note $f'(0) = 0$ and the sign flips from + to − there: the bell curve peaks at $x=0$.</p></div>
+<div class="ex"><div class="extag">Worked example: rules combined</div>
+<p>Differentiate $h(x) = x\,e^{-\lambda x}$ ($\lambda$ a constant). Product rule with a chain rule inside:
+$$h'(x) = 1\cdot e^{-\lambda x} + x\cdot(-\lambda e^{-\lambda x}) = (1 - \lambda x)\,e^{-\lambda x}$$
+This exact computation appears when you work with the exponential distribution in Ross Ch. 5.</p></div>
+<div class="prob"><div class="extag">Why this matters for probability</div>
+<p>Your syllabus lists "chain rule and product rule" by name. Concretely: differentiating CDFs like $F(x) = 1 - e^{-\lambda x}$ to get densities ($F'(x) = \lambda e^{-\lambda x}$ — chain rule), and working with moment generating functions in Ch. 7 (products and compositions everywhere).</p></div>
+<div class="warnbox"><b>Most common beginner error:</b> forgetting the inside derivative. $\left(e^{-2x}\right)'$ is $-2e^{-2x}$, not $e^{-2x}$. Every time you differentiate a composition, ask: "what is the inside, and did I multiply by its derivative?"</div>
+`,
+quiz:[
+{q:R`$\dfrac{d}{dx}\,e^{5x} = \,?$`, opts:[R`$5e^{5x}$`, R`$e^{5x}$`, R`$5e^{4x}$`, R`$e^{5}$`], c:0, expl:R`Chain rule: outside $e^{(\cdot)}$ stays, times inside derivative 5.`},
+{q:R`$\dfrac{d}{dx}\,\ln x = \,?$`, opts:[R`$\dfrac{1}{x}$`, R`$\ln x$`, R`$e^x$`, R`$x\ln x$`], c:0, expl:R`One of the two "memorize cold" facts.`},
+{q:R`$\dfrac{d}{dx}\left[x e^x\right] = \,?$`, opts:[R`$(1+x)e^x$`, R`$e^x$`, R`$x e^x$`, R`$(1+x)e^{x-1}$`], c:0, expl:R`Product rule: $1\cdot e^x + x\cdot e^x = (1+x)e^x$.`},
+{q:R`$\dfrac{d}{dx}\,(3x+1)^4 = \,?$`, opts:[R`$12(3x+1)^3$`, R`$4(3x+1)^3$`, R`$(3x+1)^3$`, R`$12x^3$`], c:0, expl:R`Chain rule: $4(3x+1)^3 \cdot 3 = 12(3x+1)^3$. Don't forget the inside derivative 3.`},
+{q:R`$\dfrac{d}{dx}\,\ln(x^2+4) = \,?$`, opts:[R`$\dfrac{2x}{x^2+4}$`, R`$\dfrac{1}{x^2+4}$`, R`$\dfrac{2x}{\ln(x^2+4)}$`, R`$2x\ln(x^2+4)$`], c:0, expl:R`$(\ln g)' = g'/g$ with $g = x^2+4$.`},
+{q:R`If $F(x) = 1 - e^{-2x}$ is a CDF, its density $f(x) = F'(x)$ is:`, opts:[R`$2e^{-2x}$`, R`$-2e^{-2x}$`, R`$e^{-2x}$`, R`$1 - 2e^{-2x}$`], c:0, expl:R`$F'(x) = 0 - e^{-2x}\cdot(-2) = 2e^{-2x}$: the exponential density with $\lambda = 2$. Two minus signs cancel — a classic exam moment.`}
+],
+drills:[
+{q:R`Differentiate $f(x) = e^{-3x}$. (Type like: -3e^(-3x))`, accept:["-3e^(-3x)","-3e^-3x"], hint:"Inside derivative is −3.", sol:R`$f'(x) = -3e^{-3x}$.`},
+{q:R`Differentiate $f(x) = \ln(5x)$. (Simplify first with log rules!)`, accept:["1/x","x^-1","x^(-1)"], hint:"ln(5x) = ln5 + ln x.", sol:R`$\ln(5x) = \ln 5 + \ln x$, and $\ln 5$ is a constant, so $f'(x) = \frac{1}{x}$. (Chain rule gives the same: $\frac{5}{5x} = \frac1x$.)`},
+{q:R`Differentiate $f(x) = x^2 e^x$ and evaluate at $x = 1$. Enter in terms of e (type like: 3e) or a decimal.`, accept:["3e","3e^1"], num:8.1548, hint:"Product rule, then plug in 1.", sol:R`$f'(x) = (2x + x^2)e^x$, so $f'(1) = 3e \approx 8.155$.`},
+{q:R`Differentiate $f(x) = (2x+1)^3$ and evaluate at $x = 0$.`, accept:["6"], num:6, hint:"3(2x+1)²·2, then x = 0.", sol:R`$f'(x) = 6(2x+1)^2$, so $f'(0) = 6$.`},
+{q:R`Let $f(x) = e^{-x^2/2}$. Compute $f'(1)$ in terms of $e$ (type like: -e^(-1/2)) or as a decimal.`, accept:["-e^(-1/2)","-e^-1/2","-1/e^(1/2)","-e^(-0.5)"], num:-0.6065, hint:"f'(x) = −x·e^(−x²/2) from the lesson.", sol:R`$f'(x) = -x e^{-x^2/2}$, so $f'(1) = -e^{-1/2} \approx -0.607$.`},
+{q:R`$F(x) = 1 - e^{-5x}$. Compute the density $f(x) = F'(x)$. (Type like: 5e^(-5x))`, accept:["5e^(-5x)","5e^-5x"], hint:"Chain rule; watch the two minus signs.", sol:R`$F'(x) = 5e^{-5x}$ — the exponential($\lambda{=}5$) density.`},
+{q:R`Differentiate $f(x) = \dfrac{\ln x}{x}$ and evaluate at $x = 1$.`, accept:["1"], num:1, hint:"Quotient rule; ln(1) = 0.", sol:R`$f'(x) = \frac{(1/x)\cdot x - \ln x}{x^2} = \frac{1 - \ln x}{x^2}$, so $f'(1) = \frac{1-0}{1} = 1$.`}
+]
+},
+/* ============================================================ M4 */
+{
+id:"m4", title:"Using Derivatives: Max/Min & L'Hôpital's Rule", short:"Max/Min & L'Hôpital",
+sub:"Finding peaks of functions, and the rule your syllabus names for evaluating 0/0 limits.",
+week:"Week 4",
+lesson: R`
+<h3>1. Finding maxima and minima</h3>
+<p>Recipe for locating the peak or valley of a smooth function:</p>
+<ol>
+<li>Compute $f'(x)$.</li>
+<li>Solve $f'(x) = 0$. Solutions are called <b>critical points</b>.</li>
+<li>Classify: if $f'$ goes $+ \to -$ across the point it's a <b>max</b>; $- \to +$ means <b>min</b>. (Equivalently: $f''(x) < 0$ means max, $f''(x) > 0$ means min, where $f''$ is the derivative of $f'$.)</li>
+</ol>
+<div class="ex"><div class="extag">Worked example</div>
+<p>Maximize $f(x) = x e^{-x}$ for $x \ge 0$.</p>
+<p>Product + chain rule: $f'(x) = e^{-x} - x e^{-x} = (1-x)e^{-x}$.</p>
+<p>Since $e^{-x} > 0$ always, $f'(x) = 0$ exactly when $x = 1$. For $x<1$, $f' > 0$ (rising); for $x>1$, $f' < 0$ (falling). So $x = 1$ is the maximum, with value $f(1) = e^{-1} \approx 0.368$.</p></div>
+<div class="prob"><div class="extag">Why this matters for probability</div>
+<p>"Where does this density peak?" (the <b>mode</b>) is a standard question — e.g. the mode of the exponential-related densities in Ch. 5. Later in statistics, maximum likelihood estimation is literally this recipe applied to a likelihood function.</p></div>
+
+<h3>2. L'Hôpital's rule</h3>
+<p>From Module 1: plugging into a limit sometimes gives the indeterminate forms $\frac{0}{0}$ or $\frac{\infty}{\infty}$. L'Hôpital's rule says: in that case, differentiate top and bottom <i>separately</i> and try again.</p>
+<div class="keybox"><div class="extag">L'Hôpital's rule</div>
+<p>If $\displaystyle\lim_{x\to a}\frac{f(x)}{g(x)}$ gives $\frac{0}{0}$ or $\frac{\infty}{\infty}$, then
+$$\lim_{x\to a}\frac{f(x)}{g(x)} = \lim_{x\to a}\frac{f'(x)}{g'(x)}$$
+(provided the right side exists). $a$ can be a number or $\pm\infty$.</p></div>
+<div class="warnbox"><b>Two warnings.</b> (1) Check the form first — using L'Hôpital on a limit that isn't $\frac00$ or $\frac\infty\infty$ gives wrong answers. (2) It's $\frac{f'}{g'}$, top and bottom differentiated separately — <i>not</i> the quotient rule.</div>
+<div class="ex"><div class="extag">Example 1</div>
+<p>$\displaystyle\lim_{x\to 0}\frac{e^x - 1}{x}$. Form: $\frac{0}{0}$. ✓ Differentiate top and bottom: $\dfrac{e^x}{1} \to e^0 = 1$.</p></div>
+<div class="ex"><div class="extag">Example 2: repeat if needed</div>
+<p>$\displaystyle\lim_{x\to\infty}\frac{x^2}{e^x}$. Form: $\frac{\infty}{\infty}$. ✓ L'Hôpital: $\dfrac{2x}{e^x}$ — still $\frac{\infty}{\infty}$. Apply again: $\dfrac{2}{e^x} \to 0$.</p>
+<p>This proves Module 1's slogan: <b>exponentials beat polynomials</b>. Any $\frac{x^n}{e^x} \to 0$; you just apply the rule $n$ times.</p></div>
+<div class="ex"><div class="extag">Example 3: products in disguise</div>
+<p>$\displaystyle\lim_{x\to\infty} x e^{-x}$ has the form $\infty \cdot 0$. Rewrite as a fraction first: $x e^{-x} = \dfrac{x}{e^x}$, which is $\frac{\infty}{\infty}$, then L'Hôpital gives $\dfrac{1}{e^x} \to 0$.</p></div>
+<div class="prob"><div class="extag">Why this matters for probability</div>
+<p>Tail behavior. Showing $x\,e^{-\lambda x} \to 0$ or $x^2 e^{-x^2/2} \to 0$ as $x \to \infty$ is exactly what makes expected values of exponential and normal random variables finite (Ch. 5 and 7), and these limits show up when integration by parts leaves you a "boundary term" to evaluate.</p></div>
+`,
+quiz:[
+{q:R`Critical points of $f$ are found by solving:`, opts:[R`$f'(x) = 0$`, R`$f(x) = 0$`, R`$f''(x) = 0$`, R`$f(x) = f'(x)$`], c:0, expl:R`Peaks and valleys of smooth functions occur where the slope is zero.`},
+{q:R`$f(x) = x e^{-2x}$, $x\ge0$, has $f'(x) = (1-2x)e^{-2x}$. Where is its maximum?`, opts:[R`$x = \tfrac12$`, R`$x = 2$`, R`$x = 0$`, R`$x = e$`], c:0, expl:R`$e^{-2x}>0$ always, so $f' = 0$ when $1 - 2x = 0$, i.e. $x = 1/2$; sign goes + to −.`},
+{q:R`When may you apply L'Hôpital's rule to $\lim \frac{f}{g}$?`, opts:[R`Only when the form is $\frac00$ or $\frac\infty\infty$`, R`Whenever the limit is hard`, R`Only when $x \to \infty$`, R`Only for polynomials`], c:0, expl:R`Check the indeterminate form first — always.`},
+{q:R`$\displaystyle\lim_{x\to 0}\frac{e^{3x}-1}{x} = \,?$`, opts:[R`$3$`, R`$1$`, R`$0$`, R`$e^3$`], c:0, expl:R`$\frac00$ form; differentiate: $\frac{3e^{3x}}{1} \to 3$.`},
+{q:R`$\displaystyle\lim_{x\to\infty}\frac{x^3}{e^x} = \,?$`, opts:[R`$0$`, R`$\infty$`, R`$1$`, R`$3$`], c:0, expl:R`Apply L'Hôpital three times: $\frac{6}{e^x} \to 0$. Exponentials beat polynomials.`},
+{q:R`$\displaystyle\lim_{x\to 1}\frac{\ln x}{x-1} = \,?$`, opts:[R`$1$`, R`$0$`, R`$\infty$`, R`$e$`], c:0, expl:R`$\frac00$ form; L'Hôpital: $\frac{1/x}{1} \to 1$.`}
+],
+drills:[
+{q:R`$f(x) = x^2 - 10x + 3$. Find the $x$ where $f$ is minimized.`, accept:["5"], num:5, hint:"Solve f'(x) = 0.", sol:R`$f'(x) = 2x - 10 = 0 \Rightarrow x = 5$ (parabola opens up, so it's a min).`},
+{q:R`$f(x) = x e^{-x}$. What is the maximum VALUE of $f$? (Type like: e^(-1), 1/e, or a decimal.)`, accept:["1/e","e^(-1)","e^-1"], num:0.3679, hint:"Max is at x = 1 (from the lesson).", sol:R`$f(1) = 1\cdot e^{-1} = 1/e \approx 0.368$.`},
+{q:R`$\displaystyle\lim_{x\to 0}\frac{e^x - 1 - x}{x^2}$ (enter fraction or decimal)`, accept:["1/2","0.5"], num:0.5, hint:"L'Hôpital twice.", sol:R`First: $\frac{e^x - 1}{2x}$ (still $\frac00$). Again: $\frac{e^x}{2} \to \frac12$.`},
+{q:R`$\displaystyle\lim_{x\to\infty}\frac{5x^2 + 1}{e^x}$`, accept:["0"], num:0, hint:"Who wins: polynomial or exponential?", sol:R`L'Hôpital twice: $\frac{10}{e^x} \to 0$.`},
+{q:R`$\displaystyle\lim_{x\to\infty} x^2 e^{-x^2}$`, accept:["0"], num:0, hint:"Rewrite as x²/e^(x²).", sol:R`$\frac{x^2}{e^{x^2}}$ is $\frac\infty\infty$; L'Hôpital: $\frac{2x}{2x e^{x^2}} = \frac{1}{e^{x^2}} \to 0$. (Normal-distribution tails vanish fast.)`},
+{q:R`$\displaystyle\lim_{x\to 0}\frac{\ln(1+x)}{x}$`, accept:["1"], num:1, hint:"0/0; differentiate top and bottom.", sol:R`L'Hôpital: $\frac{1/(1+x)}{1} \to 1$. (Equivalently: $\ln(1+x) \approx x$ for small $x$ — a fact Ross uses in Ch. 8.)`}
+]
+},
+/* ============================================================ M5 */
+{
+id:"m5", title:"Integrals I: Antiderivatives & the Fundamental Theorem", short:"Integrals I",
+sub:"Integration reverses differentiation and computes area under curves — which in probability means computing probabilities.",
+week:"Week 5",
+lesson: R`
+<h3>1. The two faces of the integral</h3>
+<p><b>Face 1 — area:</b> the definite integral $\displaystyle\int_a^b f(x)\,dx$ is the area between the graph of $f$ and the $x$-axis, from $x=a$ to $x=b$.</p>
+<p><b>Face 2 — anti-derivative:</b> an <b>antiderivative</b> of $f$ is a function $F$ whose derivative is $f$ (i.e. $F' = f$). We write the general antiderivative as the <i>indefinite</i> integral $\int f(x)\,dx = F(x) + C$. The $+C$ is there because adding any constant doesn't change the derivative.</p>
+<p>The miracle that connects them:</p>
+<div class="keybox"><div class="extag">Fundamental Theorem of Calculus</div>
+<p>$$\int_a^b f(x)\,dx = F(b) - F(a) \qquad \text{where } F' = f$$</p>
+<p>Area under a curve = antiderivative at the top limit minus antiderivative at the bottom limit. Notation: $F(b)-F(a)$ is often written $\Big[F(x)\Big]_a^b$.</p></div>
+<div class="prob"><div class="extag">Why this matters for probability</div>
+<p>For a continuous random variable with density $f$:
+$$P(a \le X \le b) = \int_a^b f(x)\,dx$$
+Probability <i>is</i> area under the density curve. And the CDF is $F(x) = \int_{-\infty}^x f(t)\,dt$, which is why $F' = f$. This single idea is the backbone of Ross Chapters 5–7.</p></div>
+
+<h3>2. Basic antiderivatives</h3>
+<p>Read your derivative table backwards:</p>
+<div class="eq">$$\int x^n\,dx = \frac{x^{n+1}}{n+1} + C \quad (n \neq -1) \qquad \int \frac{1}{x}\,dx = \ln|x| + C$$</div>
+<div class="eq">$$\int e^x\,dx = e^x + C \qquad \int e^{kx}\,dx = \frac{1}{k}e^{kx} + C \qquad \int c\,dx = cx + C$$</div>
+<p>The power rule in reverse: raise the exponent by one, divide by the new exponent. Check any antiderivative by differentiating it — you should recover the integrand. <i>Always do this check; it's free.</i></p>
+<div class="ex"><div class="extag">Example</div>
+<p>$\displaystyle\int (6x^2 - 4x + 1)\,dx = 2x^3 - 2x^2 + x + C$. &nbsp;Check: $(2x^3 - 2x^2 + x)' = 6x^2 - 4x + 1$. ✓</p></div>
+
+<h3>3. Computing definite integrals</h3>
+<div class="ex"><div class="extag">Worked example</div>
+<p>$\displaystyle\int_1^3 x^2\,dx$. Antiderivative: $\frac{x^3}{3}$. Evaluate:
+$$\Big[\tfrac{x^3}{3}\Big]_1^3 = \frac{27}{3} - \frac{1}{3} = \frac{26}{3}$$
+(No $+C$ needed for definite integrals — it cancels in the subtraction.)</p></div>
+<div class="ex"><div class="extag">Worked example with $e$</div>
+<p>$\displaystyle\int_0^1 e^{2x}\,dx = \Big[\tfrac12 e^{2x}\Big]_0^1 = \tfrac12 e^2 - \tfrac12 = \tfrac{e^2 - 1}{2} \approx 3.19$.</p></div>
+
+<h3>4. Useful properties</h3>
+<ul>
+<li>Split sums: $\int (f + g) = \int f + \int g$; constants pull out: $\int c f = c\int f$.</li>
+<li>Split ranges: $\int_a^b + \int_b^c = \int_a^c$ &nbsp;(used to break probabilities into pieces).</li>
+<li>Zero width: $\int_a^a f = 0$ &nbsp;(in probability: $P(X = a) = 0$ for continuous $X$ — a fact Ross emphasizes).</li>
+</ul>
+<div class="ex"><div class="extag">A first probability computation</div>
+<p>Let $f(x) = 2x$ on $[0,1]$ (a legitimate density: it's $\ge 0$ and $\int_0^1 2x\,dx = [x^2]_0^1 = 1$ ✓). Then
+$$P\left(X \le \tfrac12\right) = \int_0^{1/2} 2x\,dx = \Big[x^2\Big]_0^{1/2} = \tfrac14$$
+You just did Ross Chapter 5, Example 1, essentially.</p></div>
+`,
+quiz:[
+{q:R`$\displaystyle\int x^4\,dx = \,?$`, opts:[R`$\dfrac{x^5}{5} + C$`, R`$4x^3 + C$`, R`$\dfrac{x^4}{4} + C$`, R`$5x^5 + C$`], c:0, expl:R`Raise the power to 5, divide by 5. (Choosing $4x^3$ means you differentiated instead of integrating.)`},
+{q:R`$\displaystyle\int_0^2 3x^2\,dx = \,?$`, opts:[R`$8$`, R`$12$`, R`$6$`, R`$4$`], c:0, expl:R`Antiderivative $x^3$; evaluate: $8 - 0 = 8$.`},
+{q:R`$\displaystyle\int e^{-3x}\,dx = \,?$`, opts:[R`$-\tfrac{1}{3}e^{-3x} + C$`, R`$e^{-3x} + C$`, R`$-3e^{-3x} + C$`, R`$\tfrac{1}{3}e^{-3x} + C$`], c:0, expl:R`Divide by the inside coefficient $-3$. Check by differentiating: $(-\tfrac13 e^{-3x})' = e^{-3x}$ ✓.`},
+{q:R`For a density $f$, $P(1 \le X \le 4)$ equals:`, opts:[R`$\int_1^4 f(x)\,dx$`, R`$f(4) - f(1)$`, R`$\int_1^4 x f(x)\,dx$`, R`$f(1) + f(4)$`], c:0, expl:R`Probability = area under the density between the bounds.`},
+{q:R`The Fundamental Theorem of Calculus says $\int_a^b f(x)\,dx$ equals:`, opts:[R`$F(b) - F(a)$ where $F' = f$`, R`$f(b) - f(a)$`, R`$f'(b) - f'(a)$`, R`$F(a) - F(b)$ where $F' = f$`], c:0, expl:R`Antiderivative at top minus antiderivative at bottom. Order matters!`},
+{q:R`If $F(x) = \int_{-\infty}^x f(t)\,dt$ is a CDF, then $F'(x) = \,?$`, opts:[R`$f(x)$`, R`$0$`, R`$F(x)$`, R`$\int f(x) dx$`], c:0, expl:R`Differentiating the CDF recovers the density — the FTC in probability clothing.`}
+],
+drills:[
+{q:R`$\displaystyle\int 8x^3\,dx$ (omit +C; type like: 2x^4)`, accept:["2x^4"], hint:"Raise power, divide by new power.", sol:R`$8 \cdot \frac{x^4}{4} = 2x^4\ (+C)$.`},
+{q:R`$\displaystyle\int_0^1 x\,dx$`, accept:["1/2","0.5"], num:0.5, hint:"Antiderivative x²/2.", sol:R`$[\tfrac{x^2}{2}]_0^1 = \tfrac12$.`},
+{q:R`$\displaystyle\int_1^e \frac{1}{x}\,dx$`, accept:["1"], num:1, hint:"Antiderivative of 1/x is ln x.", sol:R`$[\ln x]_1^e = \ln e - \ln 1 = 1 - 0 = 1$.`},
+{q:R`$\displaystyle\int_0^2 (3x^2 + 1)\,dx$`, accept:["10"], num:10, hint:"Antiderivative x³ + x.", sol:R`$[x^3 + x]_0^2 = 8 + 2 = 10$.`},
+{q:R`$\displaystyle\int_0^1 e^{x}\,dx$ (type like: e-1, or a decimal)`, accept:["e-1","-1+e"], num:1.71828, hint:"Antiderivative of eˣ is itself.", sol:R`$[e^x]_0^1 = e - 1 \approx 1.718$.`},
+{q:R`$f(x) = 3x^2$ on $[0,1]$ is a density. Compute $P(X \le 1/2)$. (fraction or decimal)`, accept:["1/8","0.125"], num:0.125, hint:"Integrate the density from 0 to 1/2.", sol:R`$\int_0^{1/2} 3x^2 dx = [x^3]_0^{1/2} = \tfrac18$.`},
+{q:R`Check: is $f(x) = \tfrac{x}{2}$ on $[0,2]$ a valid density? Compute $\int_0^2 \frac{x}{2} dx$.`, accept:["1"], num:1, hint:"Should equal 1 for a valid density.", sol:R`$[\tfrac{x^2}{4}]_0^2 = 1$ ✓ — total probability is 1, so yes.`}
+]
+},
+/* ============================================================ M6 */
+{
+id:"m6", title:"Integrals II: Substitution, By Parts & Improper Integrals", short:"Integrals II",
+sub:"The two integration techniques your syllabus names, plus integrals to infinity — the bread and butter of continuous probability.",
+week:"Week 6",
+lesson: R`
+<h3>1. Substitution (the chain rule, reversed)</h3>
+<p>When the integrand contains a function <i>and</i> its derivative, substitute $u$ for the inner function:</p>
+<ol>
+<li>Choose $u = g(x)$ (usually the "inside"). Compute $du = g'(x)\,dx$.</li>
+<li>Rewrite the whole integral in terms of $u$ and $du$ — no $x$ may remain.</li>
+<li>Integrate in $u$, then substitute back (or convert the limits and never go back).</li>
+</ol>
+<div class="ex"><div class="extag">Worked example</div>
+<p>$\displaystyle\int 2x\,e^{x^2}\,dx$. Let $u = x^2$, so $du = 2x\,dx$. The integral becomes
+$$\int e^u\,du = e^u + C = e^{x^2} + C$$
+Check by differentiating (chain rule!): $(e^{x^2})' = 2x e^{x^2}$ ✓.</p></div>
+<div class="ex"><div class="extag">Worked example with limits — a probability classic</div>
+<p>$\displaystyle\int_0^2 \lambda e^{-\lambda x}\,dx$ with $\lambda = 3$: compute $\int_0^2 3e^{-3x} dx$. Let $u = -3x$, $du = -3dx$, or just use the known antiderivative $-e^{-3x}$:
+$$\Big[-e^{-3x}\Big]_0^2 = -e^{-6} - (-e^{0}) = 1 - e^{-6} \approx 0.9975$$
+That is $P(X \le 2)$ for an exponential random variable with rate 3.</p></div>
+
+<h3>2. Integration by parts (the product rule, reversed)</h3>
+<div class="keybox"><div class="extag">Integration by parts</div>
+<p>$$\int u\,dv = uv - \int v\,du$$</p></div>
+<p>Use it for products of "different species," classically $\int x e^{x} dx$ or $\int x \ln x\, dx$. Strategy: pick $u$ = the part that gets <i>simpler</i> when differentiated (usually the polynomial), $dv$ = the rest (something you can integrate).</p>
+<div class="ex"><div class="extag">Worked example — THE probability integral</div>
+<p>$\displaystyle\int x e^{-x}\,dx$. Pick $u = x$ (differentiates to 1 — simpler ✓) and $dv = e^{-x}dx$ (so $v = -e^{-x}$).
+$$\int x e^{-x} dx = x\cdot(-e^{-x}) - \int (-e^{-x})\cdot 1\,dx = -xe^{-x} - e^{-x} + C$$
+Check: $\left(-xe^{-x} - e^{-x}\right)' = -e^{-x} + xe^{-x} + e^{-x} = xe^{-x}$ ✓</p></div>
+<div class="ex"><div class="extag">Worked example</div>
+<p>$\displaystyle\int_1^e \ln x\,dx$. Trick: $u = \ln x$, $dv = dx$, so $du = \frac1x dx$, $v = x$:
+$$\Big[x\ln x\Big]_1^e - \int_1^e x\cdot\frac1x\,dx = (e - 0) - (e - 1) = 1$$</p></div>
+
+<h3>3. Improper integrals: integrating to infinity</h3>
+<p>Probability lives on $[0,\infty)$ and $(-\infty,\infty)$, so you must integrate over infinite ranges. Definition: integrate to a finite $b$, then let $b \to \infty$:</p>
+<div class="eq">$$\int_0^\infty f(x)\,dx = \lim_{b\to\infty}\int_0^b f(x)\,dx$$</div>
+<p>In practice: find the antiderivative, plug in $\infty$ "in the limit sense" (using Module 1 & 4 facts like $e^{-b} \to 0$ and $be^{-b} \to 0$), and subtract.</p>
+<div class="ex"><div class="extag">The most important integral in the course</div>
+<p>$$\int_0^\infty \lambda e^{-\lambda x}\,dx = \Big[-e^{-\lambda x}\Big]_0^\infty = \underbrace{0}_{e^{-\infty}} - (-1) = 1$$
+The exponential density integrates to 1 — it's a real probability distribution.</p></div>
+<div class="ex"><div class="extag">By parts + improper together: an expected value</div>
+<p>$$\int_0^\infty x e^{-x}\,dx = \Big[-xe^{-x} - e^{-x}\Big]_0^\infty = \big(0 - 0\big) - \big(0 - 1\big) = 1$$
+(The boundary terms at $\infty$ die because $xe^{-x}\to 0$ — that's L'Hôpital from Module 4 earning its keep.) In Ross's language: the expected value of an exponential(1) random variable is 1. This one computation combines <i>everything</i>: by parts, improper integrals, and L'Hôpital.</p></div>
+<div class="warnbox"><b>Common errors:</b> (1) In substitution, forgetting to convert $dx$ to $du$. (2) In by parts, integrating both pieces instead of differentiating one. (3) At $\infty$, writing $e^{-\infty} = -\infty$ — no: $e^{-x} \to 0$.</div>
+`,
+quiz:[
+{q:R`For $\displaystyle\int 2x(x^2+1)^5\,dx$, the natural substitution is:`, opts:[R`$u = x^2 + 1$`, R`$u = 2x$`, R`$u = x^5$`, R`$u = (x^2+1)^5$`], c:0, expl:R`The inside function, whose derivative $2x$ conveniently sits right there. Result: $\frac{(x^2+1)^6}{6} + C$.`},
+{q:R`$\displaystyle\int x e^{x}\,dx = \,?$ (by parts)`, opts:[R`$(x-1)e^x + C$`, R`$\tfrac{x^2}{2}e^x + C$`, R`$x e^x + C$`, R`$(x+1)e^x + C$`], c:0, expl:R`$u = x$, $dv = e^x dx$: $xe^x - \int e^x dx = xe^x - e^x + C$. Verify by differentiating: $(x-1)'e^x + (x-1)e^x = e^x + xe^x - e^x = xe^x$ ✓`},
+{q:R`In integration by parts, the best choice of $u$ is usually:`, opts:[R`The part that gets simpler when differentiated`, R`The part that's hardest to integrate`, R`Always the exponential`, R`The whole integrand`], c:0, expl:R`Typically the polynomial: differentiating $x$ gives 1, killing the product after one round.`},
+{q:R`$\displaystyle\int_0^\infty e^{-2x}\,dx = \,?$`, opts:[R`$\tfrac12$`, R`$1$`, R`$2$`, R`$\infty$`], c:0, expl:R`$[-\tfrac12 e^{-2x}]_0^\infty = 0 + \tfrac12$.`},
+{q:R`Why is $\int_0^\infty \lambda e^{-\lambda x} dx = 1$ important?`, opts:[R`It shows the exponential density is a valid probability distribution`, R`It computes the mean of the distribution`, R`It shows the integral diverges`, R`It's the definition of $\lambda$`], c:0, expl:R`Densities must have total area 1 — total probability. (The mean is $\int x\lambda e^{-\lambda x}dx = 1/\lambda$.)`},
+{q:R`$\displaystyle\int_0^1 x e^{x^2}\,dx = \,?$`, opts:[R`$\tfrac{e-1}{2}$`, R`$e - 1$`, R`$\tfrac{e}{2}$`, R`$e^2$`], c:0, expl:R`Sub $u = x^2$, $du = 2x\,dx$: $\tfrac12\int_0^1 e^u du = \tfrac{e-1}{2}$.`}
+],
+drills:[
+{q:R`$\displaystyle\int 3x^2 e^{x^3}\,dx$ (omit +C; type like: e^(x^3))`, accept:["e^(x^3)","e^x^3"], hint:"u = x³.", sol:R`$u = x^3$, $du = 3x^2 dx$: $\int e^u du = e^{x^3} + C$.`},
+{q:R`$\displaystyle\int_0^1 2x(x^2+1)\,dx$ (fraction or decimal)`, accept:["3/2","1.5"], num:1.5, hint:"Sub u = x²+1 (limits become 1 to 2), or just expand.", sol:R`Substitution: $u = x^2+1$, $du = 2x\,dx$; limits $x{:}\,0\to1$ become $u{:}\,1\to2$. So $\int_1^2 u\,du = [\tfrac{u^2}{2}]_1^2 = 2 - \tfrac12 = \tfrac32$. (Expanding and integrating term-by-term gives the same.)`},
+{q:R`$\displaystyle\int_0^\infty e^{-5x}\,dx$ (fraction or decimal)`, accept:["1/5","0.2"], num:0.2, hint:"Antiderivative −(1/5)e^(−5x); e^(−∞) → 0.", sol:R`$[-\tfrac15 e^{-5x}]_0^\infty = 0 + \tfrac15 = \tfrac15$.`},
+{q:R`$\displaystyle\int_0^\infty 4 e^{-4x}\,dx$`, accept:["1"], num:1, hint:"This is a density integral.", sol:R`$[-e^{-4x}]_0^\infty = 0 - (-1) = 1$. Exponential($\lambda{=}4$) is a valid density.`},
+{q:R`Using by parts (done in the lesson): $\displaystyle\int_0^\infty x e^{-x}\,dx$`, accept:["1"], num:1, hint:"Antiderivative is −xe^(−x) − e^(−x).", sol:R`$[-xe^{-x} - e^{-x}]_0^\infty = (0-0) - (0-1) = 1$. This is $E[X]$ for exponential(1).`},
+{q:R`$\displaystyle\int_1^{e^2} \frac{1}{x}\,dx$`, accept:["2"], num:2, hint:"ln at the limits.", sol:R`$[\ln x]_1^{e^2} = 2 - 0 = 2$.`},
+{q:R`$\displaystyle\int_0^{1} x e^{x}\,dx$ (type like: 1, e-2, or decimal)`, accept:["1"], num:1, hint:"Antiderivative (x−1)eˣ.", sol:R`$[(x-1)e^x]_0^1 = (0)(e) - (-1)(1) = 0 + 1 = 1$.`}
+]
+},
+/* ============================================================ M7 */
+{
+id:"m7", title:"Infinite Series: Geometric & the e^x Series", short:"Series",
+sub:"Not on the official prereq list, but Ross uses these constantly for discrete distributions. Thirty minutes here saves hours in Chapter 4.",
+week:"Week 7",
+lesson: R`
+<h3>1. What an infinite series is</h3>
+<p>An infinite series $\displaystyle\sum_{k=0}^{\infty} a_k$ is the limit of adding more and more terms. If the running total settles at a finite number, the series <b>converges</b> to it.</p>
+
+<h3>2. The geometric series — the workhorse</h3>
+<div class="keybox"><div class="extag">Geometric series</div>
+<p>For $|r| < 1$:
+$$\sum_{k=0}^{\infty} r^k = 1 + r + r^2 + r^3 + \cdots = \frac{1}{1-r}$$
+Starting from $k=1$ instead: $\displaystyle\sum_{k=1}^{\infty} r^k = \frac{r}{1-r}$. Finite version: $\displaystyle\sum_{k=0}^{n} r^k = \frac{1-r^{n+1}}{1-r}$.</p></div>
+<div class="ex"><div class="extag">Example</div>
+<p>$\displaystyle\sum_{k=0}^\infty \left(\tfrac12\right)^k = \frac{1}{1 - 1/2} = 2$. &nbsp;(1 + ½ + ¼ + ⅛ + ⋯ = 2.)</p></div>
+<div class="prob"><div class="extag">Why this matters for probability</div>
+<p>The geometric random variable (number of coin flips until the first head) has $P(X = k) = (1-p)^{k-1}p$. Checking these sum to 1 <i>is</i> a geometric series:
+$$\sum_{k=1}^\infty (1-p)^{k-1} p = p\cdot\frac{1}{1-(1-p)} = \frac{p}{p} = 1 \checkmark$$</p></div>
+
+<h3>3. The differentiation trick</h3>
+<p>Differentiate both sides of the geometric series with respect to $r$ (term by term on the left):</p>
+<div class="eq">$$\sum_{k=1}^{\infty} k\,r^{k-1} = \frac{1}{(1-r)^2} \qquad |r|<1$$</div>
+<p>This is how Ross computes the <b>expected value of a geometric random variable</b> ($E[X] = 1/p$) in one line. When you see that derivation in Ch. 4, this is the machinery.</p>
+
+<h3>4. The exponential series</h3>
+<div class="keybox"><div class="extag">The $e^x$ series</div>
+<p>$$e^x = \sum_{k=0}^{\infty} \frac{x^k}{k!} = 1 + x + \frac{x^2}{2!} + \frac{x^3}{3!} + \cdots \qquad \text{(all } x\text{)}$$</p></div>
+<div class="prob"><div class="extag">Why this matters for probability</div>
+<p>The Poisson distribution has $P(X = k) = e^{-\lambda}\dfrac{\lambda^k}{k!}$. Do these sum to 1?
+$$\sum_{k=0}^\infty e^{-\lambda}\frac{\lambda^k}{k!} = e^{-\lambda}\sum_{k=0}^\infty \frac{\lambda^k}{k!} = e^{-\lambda}\cdot e^{\lambda} = 1 \checkmark$$
+That one-line argument appears on probability exams everywhere. Know the $e^x$ series and it's free points.</p></div>
+
+<h3>5. Small-$x$ approximations (Ch. 8 preview)</h3>
+<p>Chopping series after a term or two gives approximations that Ross uses in limit theorems:</p>
+<ul>
+<li>$e^x \approx 1 + x$ for small $x$ &nbsp;(equivalently $\ln(1+x) \approx x$)</li>
+<li>This is why $\left(1 - \frac{\lambda}{n}\right)^n \to e^{-\lambda}$: take logs, $n\ln(1-\tfrac{\lambda}{n}) \approx n\cdot(-\tfrac{\lambda}{n}) = -\lambda$.</li>
+</ul>
+`,
+quiz:[
+{q:R`$\displaystyle\sum_{k=0}^{\infty}\left(\tfrac13\right)^k = \,?$`, opts:[R`$\tfrac32$`, R`$3$`, R`$\tfrac13$`, R`It diverges`], c:0, expl:R`$\frac{1}{1-1/3} = \frac{1}{2/3} = \frac32$.`},
+{q:R`The geometric series $\sum r^k$ converges exactly when:`, opts:[R`$|r| < 1$`, R`$r < 1$`, R`$r > 0$`, R`always`], c:0, expl:R`Need $|r|<1$; e.g. $r = 1$ gives $1+1+1+\cdots = \infty$, and $r = -2$ oscillates wildly.`},
+{q:R`$\displaystyle\sum_{k=0}^{\infty} \frac{2^k}{k!} = \,?$`, opts:[R`$e^2$`, R`$2e$`, R`$\infty$`, R`$4$`], c:0, expl:R`The $e^x$ series with $x = 2$.`},
+{q:R`Why does $\sum_{k=0}^\infty e^{-\lambda}\lambda^k/k! = 1$?`, opts:[R`Because $\sum \lambda^k/k! = e^{\lambda}$, which cancels $e^{-\lambda}$`, R`Because $\lambda = 1$`, R`Because factorials cancel the powers`, R`It doesn't — it equals $\lambda$`], c:0, expl:R`Pull out the constant $e^{-\lambda}$; the remaining sum is exactly the $e^x$ series at $x=\lambda$. Poisson probabilities sum to 1.`},
+{q:R`$\displaystyle\sum_{k=1}^{\infty} k r^{k-1} = \,?$ for $|r|<1$`, opts:[R`$\dfrac{1}{(1-r)^2}$`, R`$\dfrac{1}{1-r}$`, R`$\dfrac{r}{1-r}$`, R`$\dfrac{k}{1-r}$`], c:0, expl:R`Differentiate the geometric series term by term. Used to get $E[X] = 1/p$ for geometric random variables.`},
+{q:R`For small $x$, $e^x$ is approximately:`, opts:[R`$1 + x$`, R`$x$`, R`$1 - x$`, R`$x^2$`], c:0, expl:R`First two terms of the series. E.g. $e^{0.01} \approx 1.01$.`}
+],
+drills:[
+{q:R`$\displaystyle\sum_{k=0}^{\infty} \left(\tfrac14\right)^k$ (fraction or decimal)`, accept:["4/3"], num:1.33333, hint:"1/(1−r).", sol:R`$\frac{1}{1-1/4} = \frac43 \approx 1.333$.`},
+{q:R`$\displaystyle\sum_{k=1}^{\infty} \left(\tfrac12\right)^k$ (note: starts at k = 1)`, accept:["1"], num:1, hint:"r/(1−r), or subtract the k=0 term.", sol:R`$\frac{1/2}{1-1/2} = 1$. (Or: full sum 2, minus the $k{=}0$ term 1.)`},
+{q:R`A geometric RV has $P(X=k) = (0.8)^{k-1}(0.2)$. Verify total probability: what is $\sum_{k=1}^\infty P(X=k)$?`, accept:["1"], num:1, hint:"Factor out 0.2; geometric series in 0.8.", sol:R`$0.2 \cdot \frac{1}{1-0.8} = 0.2 \cdot 5 = 1$ ✓`},
+{q:R`$\displaystyle\sum_{k=0}^{\infty} \frac{3^k}{k!}$ (type like: e^3, or a decimal)`, accept:["e^3","e^(3)"], num:20.0855, hint:"Recognize the series.", sol:R`$e^x$ series at $x=3$: $e^3 \approx 20.09$.`},
+{q:R`$\displaystyle\sum_{k=1}^{\infty} k\left(\tfrac12\right)^{k-1}$`, accept:["4"], num:4, hint:"1/(1−r)² with r = 1/2.", sol:R`$\frac{1}{(1-1/2)^2} = \frac{1}{1/4} = 4$. (Related fact: a geometric RV with $p = 1/2$ has mean $1/p = 2$.)`},
+{q:R`Using $e^x \approx 1+x$: estimate $\ln(1.05)$ to 2 decimals.`, accept:["0.05",".05"], num:0.05, hint:"ln(1+x) ≈ x.", sol:R`$\ln(1+x)\approx x$ with $x = 0.05$: about $0.05$ (true value 0.04879 — close).`}
+]
+},
+/* ============================================================ M8 */
+{
+id:"m8", title:"Multivariable: Partial Derivatives & Double Integrals", short:"Partials & Double ∫",
+sub:"Functions of two variables — required for jointly distributed random variables (Ross Ch. 6, on your syllabus by name).",
+week:"Week 7–8",
+lesson: R`
+<h3>1. Functions of two variables</h3>
+<p>$f(x,y)$ takes <i>two</i> inputs and returns one number, e.g. $f(x,y) = x^2 y + e^{x+y}$. Its graph is a surface over the $xy$-plane. In probability, a <b>joint density</b> $f(x,y)$ describes two random variables at once — e.g. height and weight of a random person.</p>
+
+<h3>2. Partial derivatives</h3>
+<p>The partial derivative $\dfrac{\partial f}{\partial x}$ means: <b>differentiate with respect to $x$, treating $y$ as a constant</b> (and vice versa). That's the entire rule — every technique from Modules 2–3 applies unchanged.</p>
+<div class="ex"><div class="extag">Worked example</div>
+<p>$f(x,y) = x^3 y^2 + 4y$.</p>
+<p>$\dfrac{\partial f}{\partial x} = 3x^2 y^2$ &nbsp;($y^2$ is a constant coefficient; $4y$ is a constant, deriv. 0)</p>
+<p>$\dfrac{\partial f}{\partial y} = 2x^3 y + 4$ &nbsp;($x^3$ is now the constant coefficient)</p></div>
+<div class="ex"><div class="extag">Worked example with $e$</div>
+<p>$f(x,y) = e^{-x-2y}$: &nbsp; $\dfrac{\partial f}{\partial x} = -e^{-x-2y}$, &nbsp; $\dfrac{\partial f}{\partial y} = -2e^{-x-2y}$ (chain rule on each).</p></div>
+<div class="prob"><div class="extag">Why this matters for probability</div>
+<p>The joint CDF and joint density are linked by $f(x,y) = \dfrac{\partial^2}{\partial x\,\partial y} F(x,y)$ — differentiate once in each variable. This is the two-variable version of $F' = f$, and Ross Ch. 6 states it early.</p></div>
+
+<h3>3. Double integrals</h3>
+<p>$\displaystyle\iint_A f(x,y)\,dA$ is the <b>volume</b> under the surface $f$ over the region $A$. You compute it as an <b>iterated integral</b> — integrate in one variable at a time, inside out:</p>
+<div class="eq">$$\int_c^d\!\!\int_a^b f(x,y)\,dx\,dy \;=\; \int_c^d \left(\underbrace{\int_a^b f(x,y)\,dx}_{\text{treat } y \text{ as constant}}\right) dy$$</div>
+<div class="ex"><div class="extag">Worked example (rectangle)</div>
+<p>$\displaystyle\int_0^1\!\!\int_0^2 xy\,dx\,dy$.</p>
+<p><b>Inner</b> (in $x$, with $y$ constant): $\displaystyle\int_0^2 xy\,dx = y\Big[\tfrac{x^2}{2}\Big]_0^2 = 2y$.</p>
+<p><b>Outer</b>: $\displaystyle\int_0^1 2y\,dy = \Big[y^2\Big]_0^1 = 1$.</p></div>
+<div class="ex"><div class="extag">Worked example (a real joint density)</div>
+<p>Let $f(x,y) = e^{-x-y}$ for $x \ge 0, y \ge 0$. Check total probability:
+$$\int_0^\infty\!\!\int_0^\infty e^{-x}e^{-y}\,dx\,dy = \left(\int_0^\infty e^{-x}dx\right)\!\left(\int_0^\infty e^{-y}dy\right) = 1 \cdot 1 = 1 \checkmark$$
+When the integrand factors and the region is a rectangle, the double integral is just a product of single integrals — in probability language, that's <b>independence</b>.</p></div>
+<div class="ex"><div class="extag">Non-rectangular region (the classic exam upgrade)</div>
+<p>Compute $P(X < Y)$ for that same density — the region is $0 \le x < y < \infty$, a triangle. Make the <i>inner</i> limits depend on the outer variable:
+$$\int_0^\infty\!\!\int_0^y e^{-x}e^{-y}\,dx\,dy = \int_0^\infty e^{-y}\Big[-e^{-x}\Big]_0^y dy = \int_0^\infty e^{-y}(1 - e^{-y})\,dy$$
+$$= \int_0^\infty (e^{-y} - e^{-2y})\,dy = 1 - \tfrac12 = \tfrac12$$
+Which makes sense: by symmetry, $X < Y$ half the time. Being able to set up limits like $\int_0^\infty\int_0^y$ is the #1 skill for Ross Ch. 6.</p></div>
+<div class="warnbox"><b>Key habit:</b> before integrating, sketch the region. Decide which variable is inner, and whether its limits are constants or depend on the outer variable. Most Ch. 6 mistakes are wrong limits, not wrong antiderivatives.</div>
+`,
+quiz:[
+{q:R`$f(x,y) = x^2 y^3$. $\dfrac{\partial f}{\partial x} = \,?$`, opts:[R`$2xy^3$`, R`$3x^2y^2$`, R`$2x + y^3$`, R`$6xy^2$`], c:0, expl:R`Treat $y^3$ as a constant coefficient: $y^3 \cdot 2x$.`},
+{q:R`$f(x,y) = e^{xy}$. $\dfrac{\partial f}{\partial y} = \,?$`, opts:[R`$x e^{xy}$`, R`$y e^{xy}$`, R`$e^{xy}$`, R`$e^{x}$`], c:0, expl:R`Chain rule in $y$ with $x$ constant: inside derivative is $x$.`},
+{q:R`$\displaystyle\int_0^1\!\!\int_0^1 4xy\,dx\,dy = \,?$`, opts:[R`$1$`, R`$4$`, R`$2$`, R`$\tfrac14$`], c:0, expl:R`Inner: $4y\cdot\frac12 = 2y$; outer: $\int_0^1 2y\,dy = 1$. So $f(x,y)=4xy$ is a valid joint density on the unit square.`},
+{q:R`A double integral of a joint density $f(x,y)$ over a region $A$ computes:`, opts:[R`$P\big((X,Y) \in A\big)$`, R`$E[XY]$`, R`The area of $A$`, R`The maximum of $f$ on $A$`], c:0, expl:R`Volume under the joint density over $A$ = probability the pair lands in $A$.`},
+{q:R`To compute $P(X < Y)$ you integrate over the region $x < y$. With outer variable $y$ from $0$ to $\infty$, the inner $x$-limits are:`, opts:[R`$0$ to $y$`, R`$0$ to $\infty$`, R`$y$ to $\infty$`, R`$0$ to $1$`], c:0, expl:R`For each fixed $y$, $x$ runs from 0 up to $y$. Limits depending on the outer variable = non-rectangular region.`},
+{q:R`If $f(x,y) = g(x)h(y)$ on a rectangle, then $\iint f\,dA$ equals:`, opts:[R`$\left(\int g\,dx\right)\left(\int h\,dy\right)$`, R`$\int g\,dx + \int h\,dy$`, R`$\int (g+h)$`, R`It cannot be computed`], c:0, expl:R`Factorable integrand + rectangular region → product of single integrals. This is the calculus behind independent random variables.`}
+],
+drills:[
+{q:R`$f(x,y) = 3x^2y + y^2$. Enter $\dfrac{\partial f}{\partial x}$. (Type like: 6xy)`, accept:["6xy","6yx"], hint:"y is constant; y² dies.", sol:R`$\frac{\partial f}{\partial x} = 6xy$.`},
+{q:R`Same $f$. Enter $\dfrac{\partial f}{\partial y}$. (Type like: 3x^2+2y)`, accept:["3x^2+2y","2y+3x^2"], hint:"x is constant now.", sol:R`$\frac{\partial f}{\partial y} = 3x^2 + 2y$.`},
+{q:R`$f(x,y) = e^{-2x-3y}$. Compute $\dfrac{\partial f}{\partial x}$ at $(0,0)$.`, accept:["-2"], num:-2, hint:"Chain rule, then plug in.", sol:R`$\frac{\partial f}{\partial x} = -2e^{-2x-3y}$; at $(0,0)$: $-2$.`},
+{q:R`$\displaystyle\int_0^2\!\!\int_0^1 x\,dx\,dy$ (fraction or decimal)`, accept:["1"], num:1, hint:"Inner gives 1/2; outer doubles it.", sol:R`Inner: $\int_0^1 x\,dx = \tfrac12$. Outer: $\int_0^2 \tfrac12\,dy = 1$.`},
+{q:R`$\displaystyle\int_0^1\!\!\int_0^1 (x + y)\,dx\,dy$`, accept:["1"], num:1, hint:"Inner: 1/2 + y.", sol:R`Inner: $[\tfrac{x^2}{2} + xy]_0^1 = \tfrac12 + y$. Outer: $[\tfrac{y}{2} + \tfrac{y^2}{2}]_0^1 = 1$.`},
+{q:R`$\displaystyle\int_0^\infty\!\!\int_0^\infty 2e^{-x-2y}\,dx\,dy$`, accept:["1"], num:1, hint:"Factor into two single integrals.", sol:R`$\left(\int_0^\infty e^{-x}dx\right)\left(\int_0^\infty 2e^{-2y}dy\right) = 1 \cdot 1 = 1$ — a valid joint density.`},
+{q:R`For $f(x,y) = 2e^{-x-2y}$ ($x,y \ge 0$): the inner integral of $P(X > Y)$ setup $\int_0^\infty\!\int_y^\infty 2e^{-x-2y}dx\,dy$ — evaluate just the inner part $\int_y^\infty e^{-x}dx$ at $y = 0$.`, accept:["1"], num:1, hint:"[−e^(−x)] from y to ∞ = e^(−y).", sol:R`$\int_y^\infty e^{-x}dx = e^{-y}$; at $y=0$ that's $1$.`}
+]
+},
+/* ============================================================ M9 */
+{
+id:"m9", title:"Capstone: The Calculus of Probability", short:"Capstone",
+sub:"Everything assembled into the exact moves your course will ask for: densities, CDFs, expected values, and normalizing constants.",
+week:"Week 8",
+lesson: R`
+<h3>The five moves</h3>
+<p>Continuous probability (Ross Ch. 5–7) is built from five calculus moves. You now know all of them — this module drills the assembly.</p>
+
+<h3>Move 1: Verify a density / find the normalizing constant</h3>
+<p>A function $f \ge 0$ is a valid density iff $\int_{-\infty}^{\infty} f(x)\,dx = 1$. Often you're given $f(x) = c\,g(x)$ and asked to <b>find $c$</b>: compute $\int g$ and set $c = 1/\int g$.</p>
+<div class="ex"><div class="extag">Worked example</div>
+<p>$f(x) = c\,x^2$ on $[0,2]$ (zero elsewhere). Then $\int_0^2 x^2 dx = \frac{8}{3}$, so $c = \frac{3}{8}$.</p></div>
+
+<h3>Move 2: Density ↔ CDF</h3>
+<div class="eq">$$F(x) = \int_{-\infty}^{x} f(t)\,dt \qquad\qquad f(x) = F'(x)$$</div>
+<p>Integrate the density to get the CDF; differentiate the CDF to get the density. Then $P(a \le X \le b) = F(b) - F(a)$.</p>
+<div class="ex"><div class="extag">Worked example</div>
+<p>Exponential($\lambda$): $f(x) = \lambda e^{-\lambda x}$, $x \ge 0$. For $x\ge0$:
+$$F(x) = \int_0^x \lambda e^{-\lambda t}\,dt = \Big[-e^{-\lambda t}\Big]_0^x = 1 - e^{-\lambda x}$$
+And differentiating back (chain rule): $F'(x) = \lambda e^{-\lambda x}$ ✓. Memorize this pair — it is <i>the</i> recurring example of the whole course.</p></div>
+
+<h3>Move 3: Expected value and variance</h3>
+<div class="eq">$$E[X] = \int_{-\infty}^{\infty} x\,f(x)\,dx \qquad E[X^2] = \int_{-\infty}^{\infty} x^2 f(x)\,dx$$</div>
+<div class="eq">$$\mathrm{Var}(X) = E[X^2] - \big(E[X]\big)^2$$</div>
+<p>These integrals typically need <b>by parts</b> (Module 6). Discrete versions swap $\int$ for $\Sigma$ and need <b>series</b> (Module 7).</p>
+<div class="ex"><div class="extag">Worked example</div>
+<p>$f(x) = 2x$ on $[0,1]$:
+$$E[X] = \int_0^1 x\cdot 2x\,dx = \int_0^1 2x^2 dx = \tfrac{2}{3}$$
+$$E[X^2] = \int_0^1 2x^3 dx = \tfrac12 \qquad \mathrm{Var}(X) = \tfrac12 - \tfrac49 = \tfrac{1}{18}$$</p></div>
+
+<h3>Move 4: Joint densities (two variables)</h3>
+<p>Everything above, with double integrals (Module 8): total probability $\iint f = 1$, probabilities of regions, and <b>marginals</b>:</p>
+<div class="eq">$$f_X(x) = \int_{-\infty}^{\infty} f(x,y)\,dy$$</div>
+<p>("Integrate out" the variable you don't care about.)</p>
+<div class="ex"><div class="extag">Worked example</div>
+<p>$f(x,y) = x + y$ on the unit square. Marginal of $X$:
+$$f_X(x) = \int_0^1 (x+y)\,dy = \Big[xy + \tfrac{y^2}{2}\Big]_0^1 = x + \tfrac12,\quad 0\le x\le 1$$</p></div>
+
+<h3>Move 5: Limits for the endgame</h3>
+<p>Chapter 8 (limit theorems) leans on Module 1 and 4: $\left(1 + \frac{x}{n}\right)^n \to e^x$, L'Hôpital for indeterminate forms, and tail limits like $x e^{-x} \to 0$.</p>
+
+<div class="prob"><div class="extag">You are ready when…</div>
+<p>You can do all of these without notes: differentiate $e^{-x^2/2}$ (chain) and $xe^{-\lambda x}$ (product+chain) • integrate $\int_0^\infty x e^{-x} dx$ (parts + improper) • find $c$ so that $c\,g(x)$ is a density • get a CDF from a density and back • evaluate $\int_0^1\!\int_0^y dx\,dy$-style iterated integrals • sum a geometric series and recognize the $e^x$ series. The final quiz below tests exactly this list.</p></div>
+`,
+quiz:[
+{q:R`Find $c$ so that $f(x) = c x$ on $[0,3]$ is a density.`, opts:[R`$\tfrac29$`, R`$\tfrac13$`, R`$\tfrac92$`, R`$3$`], c:0, expl:R`$\int_0^3 x\,dx = \frac92$, so $c = \frac{2}{9}$.`},
+{q:R`$X$ has CDF $F(x) = 1 - e^{-x}$ for $x\ge0$. $P(X > 2) = \,?$`, opts:[R`$e^{-2}$`, R`$1 - e^{-2}$`, R`$e^{2}$`, R`$0$`], c:0, expl:R`$P(X>2) = 1 - F(2) = e^{-2} \approx 0.135$.`},
+{q:R`$f(x) = 3x^2$ on $[0,1]$. $E[X] = \,?$`, opts:[R`$\tfrac34$`, R`$\tfrac12$`, R`$1$`, R`$\tfrac13$`], c:0, expl:R`$E[X] = \int_0^1 x\cdot3x^2 dx = \int_0^1 3x^3 dx = \tfrac34$.`},
+{q:R`For joint density $f(x,y)$, the marginal $f_Y(y)$ is:`, opts:[R`$\int f(x,y)\,dx$`, R`$\int f(x,y)\,dy$`, R`$\frac{\partial f}{\partial y}$`, R`$f(y,y)$`], c:0, expl:R`Integrate out $x$ — the variable you don't want.`},
+{q:R`$E[X] = 2$ and $E[X^2] = 7$. $\mathrm{Var}(X) = \,?$`, opts:[R`$3$`, R`$5$`, R`$45$`, R`$\sqrt{3}$`], c:0, expl:R`$7 - 2^2 = 3$.`},
+{q:R`A Poisson RV has $P(X=k) = e^{-\lambda}\lambda^k/k!$. The calculus fact making these sum to 1 is:`, opts:[R`$\sum_k \lambda^k/k! = e^{\lambda}$`, R`$\sum_k r^k = \frac{1}{1-r}$`, R`$\int_0^\infty e^{-x}dx = 1$`, R`L'Hôpital's rule`], c:0, expl:R`The exponential series (Module 7). The geometric series handles the geometric RV instead.`},
+{q:R`$\displaystyle\int_0^1\!\!\int_0^y 2\,dx\,dy = \,?$`, opts:[R`$1$`, R`$2$`, R`$\tfrac12$`, R`$\tfrac14$`], c:0, expl:R`Inner: $\int_0^y 2\,dx = 2y$. Outer: $\int_0^1 2y\,dy = 1$. This verifies that $f(x,y) = 2$ on the triangle $0 < x < y < 1$ is a valid joint density — a standard Ross Ch. 6 setup.`},
+{q:R`Which technique computes $E[X] = \int_0^\infty x \cdot \lambda e^{-\lambda x}\,dx$?`, opts:[R`Integration by parts`, R`The quotient rule`, R`Partial derivatives`, R`The geometric series`], c:0, expl:R`Product of $x$ and an exponential → by parts. (Answer: $1/\lambda$.)`}
+],
+drills:[
+{q:R`Find $c$ so $f(x) = c$ on $[0,5]$ is a density. (fraction or decimal)`, accept:["1/5","0.2"], num:0.2, hint:"c·(length of interval) = 1.", sol:R`$\int_0^5 c\,dx = 5c = 1 \Rightarrow c = \tfrac15$. (The uniform density.)`},
+{q:R`Find $c$ so $f(x) = c\,e^{-3x}$ on $[0,\infty)$ is a density.`, accept:["3"], num:3, hint:"∫e^(−3x) = 1/3.", sol:R`$\int_0^\infty e^{-3x}dx = \tfrac13$, so $c = 3$ — giving the exponential(3) density.`},
+{q:R`$f(x) = 2x$ on $[0,1]$. Compute the CDF at $x = 0.5$, i.e. $F(0.5)$.`, accept:["1/4","0.25"], num:0.25, hint:"F(x) = x² here.", sol:R`$F(x) = \int_0^x 2t\,dt = x^2$; $F(0.5) = 0.25$.`},
+{q:R`$X$ exponential with $\lambda = 2$: $F(x) = 1 - e^{-2x}$. Compute $P(X > 1)$ as a decimal (3 places) or in terms of e.`, accept:["e^(-2)","e^-2"], num:0.1353, hint:"1 − F(1).", sol:R`$P(X>1) = e^{-2} \approx 0.135$.`},
+{q:R`$f(x) = 3x^2$ on $[0,1]$. Compute $E[X^2]$. (fraction or decimal)`, accept:["3/5","0.6"], num:0.6, hint:"∫x²·3x² dx.", sol:R`$\int_0^1 3x^4 dx = \tfrac35$.`},
+{q:R`Using $E[X] = \tfrac34$ and $E[X^2] = \tfrac35$ for that density: $\mathrm{Var}(X)$? (fraction or decimal, 4 places)`, accept:["3/80","0.0375"], num:0.0375, hint:"E[X²] − (E[X])².", sol:R`$\tfrac35 - \tfrac{9}{16} = \tfrac{48-45}{80} = \tfrac{3}{80} = 0.0375$.`},
+{q:R`$f(x,y) = x + y$ on the unit square: marginal $f_X(x) = x + \tfrac12$. Evaluate $f_X$ at $x = 1$. (fraction or decimal)`, accept:["3/2","1.5"], num:1.5, hint:"Just plug in.", sol:R`$1 + \tfrac12 = \tfrac32$.`},
+{q:R`Grand finale — combines parts, improper, and L'Hôpital: $\displaystyle\int_0^\infty x\cdot 2e^{-2x}\,dx$ (this is $E[X]$ for exponential(2); fraction or decimal)`, accept:["1/2","0.5"], num:0.5, hint:"By parts, or recall E[X] = 1/λ.", sol:R`By parts: $[-xe^{-2x}]_0^\infty + \int_0^\infty e^{-2x}dx = 0 + \tfrac12$. Mean of exponential($\lambda$) is $1/\lambda$.`}
+]
+}
+];
+</script>
+<script>
+"use strict";
+/* ================= videos (all IDs verified via YouTube oEmbed) ================= */
+var VIDEOS = {
+m0:[
+ {id:"kL8Mx0gBDiw", t:"Logarithms - It's Not That Difficult!", ch:"The Organic Chemistry Tutor", len:"21 min", note:"Watch if the logarithm section felt shaky. Evaluating logs from scratch, no prerequisites."},
+ {id:"XJnIdRXUi7A", t:"Permutations and Combinations Tutorial", ch:"The Organic Chemistry Tutor", note:"Factorials and n-choose-k in action. This is literally your course's Week 1 material (Ross Ch. 1), so it pays double."},
+ {id:"WsQQvHm4lSw", t:"Understand Calculus in 35 Minutes", ch:"The Organic Chemistry Tutor", len:"35 min", note:"Optional big-picture preview of everything you'll learn this summer. Don't worry about following the details yet."}
+],
+m1:[
+ {id:"WUvTyaaNkzM", t:"The Essence of Calculus (Chapter 1)", ch:"3Blue1Brown", len:"17 min", note:"The best 17 minutes of calculus motivation ever made. Watch before anything else in this module."},
+ {id:"zLozwNf5r-8", t:"Introduction to Limits", ch:"The Organic Chemistry Tutor", note:"Worked limit computations: direct substitution, factoring, and the 0/0 situation."},
+ {id:"54_XRjHhZzI", t:"Calculus 1 Lecture 1.1: An Introduction to Limits", ch:"Professor Leonard", len:"full lecture", note:"A real classroom lecture, patient and thorough. Pick this if you want the sit-in-class experience."}
+],
+m2:[
+ {id:"9vKqVkMQHKk", t:"The Paradox of the Derivative (Chapter 2)", ch:"3Blue1Brown", len:"17 min", note:"What a derivative actually IS. Pairs exactly with section 1 of the lesson."},
+ {id:"FLAm7Hqm-58", t:"Derivatives for Beginners - Basic Introduction", ch:"The Organic Chemistry Tutor", len:"58 min", note:"A drill marathon: power rule, constants, polynomials. Do a few examples along with him, pause, predict, check."}
+],
+m3:[
+ {id:"YG15m2VwSjA", t:"Visualizing the Chain Rule and Product Rule (Chapter 4)", ch:"3Blue1Brown", len:"16 min", note:"WHY the two rules your syllabus names are true — not just the formulas."},
+ {id:"HaHsqDjWMLU", t:"Chain Rule For Finding Derivatives", ch:"The Organic Chemistry Tutor", note:"Chain rule practice, including e^(g(x)) forms — the exact pattern probability densities use."}
+],
+m4:[
+ {id:"kfF40MiS7zA", t:"Limits, L'Hôpital's Rule, and Epsilon-Delta (Chapter 7)", ch:"3Blue1Brown", len:"18 min", note:"Why L'Hôpital's rule works (9:53 onward is the L'Hôpital part)."},
+ {id:"Gh48aOvWcxw", t:"L'Hôpital's Rule", ch:"The Organic Chemistry Tutor", note:"Many worked 0/0 and ∞/∞ examples. Practice recognizing WHEN the rule applies."}
+],
+m5:[
+ {id:"rfG8ce4nNh0", t:"Integration and the Fundamental Theorem of Calculus (Chapter 8)", ch:"3Blue1Brown", len:"21 min", note:"Area under curves and why integration undoes differentiation — the FTC made visual."},
+ {id:"6WUjbJEeJwM", t:"Calculus 1 - Integration & Antiderivatives", ch:"The Organic Chemistry Tutor", len:"40 min", note:"Antiderivative practice: polynomials, exponentials, definite vs indefinite."}
+],
+m6:[
+ {id:"sdYdnpYn-1o", t:"How To Integrate Using U-Substitution", ch:"The Organic Chemistry Tutor", note:"Substitution drills — exponential examples especially, they're the probability workhorse."},
+ {id:"sWSLLO3DS1I", t:"Integration By Parts", ch:"The Organic Chemistry Tutor", note:"The technique behind every expected-value integral. Watch him choose u and dv, then predict the choice before he makes it."},
+ {id:"DUowajlKIKA", t:"Improper Integrals", ch:"Krista King", note:"Integrating to infinity, cleanly explained — exactly what total-probability checks need."}
+],
+m7:[
+ {id:"zRKZ0-kOUZM", t:"Geometric Series and Geometric Sequences", ch:"The Organic Chemistry Tutor", note:"The 1/(1−r) formula with examples. Everything Ch. 4 of Ross needs from series."},
+ {id:"3d6DsjIBzJ4", t:"Taylor Series (Chapter 11)", ch:"3Blue1Brown", len:"22 min", note:"Where the e^x = Σ x^k/k! series comes from. Makes the Poisson distribution feel inevitable."}
+],
+m8:[
+ {id:"AXqhWeUEtQU", t:"Partial Derivatives, Introduction", ch:"Khan Academy", note:"Narrated by Grant Sanderson (the 3Blue1Brown voice). Treat-y-as-constant, visualized."},
+ {id:"BJ_0FURo9RE", t:"Double Integrals", ch:"The Organic Chemistry Tutor", note:"Iterated integrals worked inside-out, including limits that depend on the outer variable."}
+],
+m9:[
+ {id:"ZA4JkHKZM50", t:"Why “Probability of 0” Does Not Mean “Impossible”", ch:"3Blue1Brown", len:"16 min", note:"A beautiful introduction to probability density functions — the perfect bridge from this bootcamp into your actual course."}
+]
+};
+var COURSES = [
+ {pl:"PLF797E961509B4EB5", thumb:"54_XRjHhZzI", t:"Calculus 1 (Full Length Lectures)", ch:"Professor Leonard", note:"A complete ~39-hour college Calc 1 course. If you want real lectures for the whole summer, this is the gold standard. Follow it alongside modules 2–7."},
+ {pl:"PLZHQObOWTQDMsr9K-rj53DwVRMYO3t5Yr", thumb:"WUvTyaaNkzM", t:"Essence of Calculus (Complete Series)", ch:"3Blue1Brown", note:"All 12 chapters of the visual intuition series. Roughly 3 hours total — worth watching in full over the summer."}
+];
+var EXT_LINKS = [
+ {t:"MIT OpenCourseWare 18.01SC: Single Variable Calculus", url:"https://ocw.mit.edu/courses/18-01sc-single-variable-calculus-fall-2010/", note:"Free full MIT course: lecture videos, notes, problem sets with solutions, exams."},
+ {t:"Khan Academy: Calculus 1", url:"https://www.khanacademy.org/math/calculus-1", note:"Bite-size videos with built-in practice exercises and mastery tracking."},
+ {t:"Khan Academy: Multivariable Calculus", url:"https://www.khanacademy.org/math/multivariable-calculus", note:"For Module 9 topics: partial derivatives and double integrals."},
+ {t:"Paul's Online Math Notes", url:"https://tutorial.math.lamar.edu/", note:"The classic free text reference — great written practice problems with full solutions."}
+];
+function ytCard(v){
+  var sub = v.ch + (v.len ? " · " + v.len : "");
+  var thumb = v.thumb || v.id;
+  return '<div class="vid">' +
+    '<div class="vthumb" data-id="' + (v.id||"") + '" data-pl="' + (v.pl||"") + '" style="background-image:url(\'https://i.ytimg.com/vi/' + thumb + '/hqdefault.jpg\')"><button class="vplay" aria-label="Play">&#9654;</button></div>' +
+    '<div class="vmeta"><div class="vtitle">' + v.t + '</div><div class="vsub">' + sub + '</div>' +
+    '<div class="vnote">' + v.note + '</div>' +
+    '<a class="vlink" href="' + (v.pl ? 'https://www.youtube.com/playlist?list=' + v.pl : 'https://www.youtube.com/watch?v=' + v.id) + '" target="_blank" rel="noopener">Open on YouTube &#8599;</a></div></div>';
+}
+function wireVideos(container){
+  container.querySelectorAll(".vthumb").forEach(function(th){
+    th.addEventListener("click", function(){
+      var id = th.getAttribute("data-id"), pl = th.getAttribute("data-pl");
+      var src = pl ? "https://www.youtube-nocookie.com/embed/videoseries?list=" + pl + "&autoplay=1"
+                   : "https://www.youtube-nocookie.com/embed/" + id + "?autoplay=1&rel=0";
+      var f = document.createElement("iframe");
+      f.className = "vframe"; f.src = src;
+      f.setAttribute("allow","accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share");
+      f.setAttribute("allowfullscreen","");
+      f.setAttribute("title","YouTube video player");
+      th.replaceWith(f);
+    });
+  });
+}
+function renderVideosTab(m, body){
+  var vids = VIDEOS[m.id] || [];
+  var h = '<div class="card"><p style="font-size:14px;color:var(--ink2);margin-bottom:18px;">Curated videos for this module — a concept video for intuition, then worked-example videos for technique. Click a thumbnail to play it right here. <b>Watch, then come back and do the drills</b> — watching alone doesn’t build the skill.</p>';
+  vids.forEach(function(v){ h += ytCard(v); });
+  h += '</div>';
+  body.innerHTML = h;
+  wireVideos(body);
+}
+function renderLibrary(){
+  var h = '<div class="crumb">Video Library</div><h2 class="pagetitle">Lectures & Full Courses</h2>' +
+    '<p class="pagesub">Module-specific videos live in each module’s <b>Videos</b> tab. This page collects the full-length courses if you want a deeper companion for the whole summer.</p>';
+  h += '<div class="card"><h3 style="font-size:16px;font-weight:750;margin-bottom:12px;">Full video courses (playable here)</h3>';
+  COURSES.forEach(function(c){ h += ytCard(c); });
+  h += '</div>';
+  h += '<div class="card"><h3 style="font-size:16px;font-weight:750;margin-bottom:12px;">More free resources</h3>';
+  EXT_LINKS.forEach(function(l){
+    h += '<div style="padding:9px 0;border-bottom:1px dashed var(--line);">' +
+      '<a class="vlink" style="font-size:14px;margin:0;" href="' + l.url + '" target="_blank" rel="noopener">' + l.t + ' &#8599;</a>' +
+      '<div class="vnote" style="margin-top:2px;">' + l.note + '</div></div>';
+  });
+  h += '</div>';
+  h += '<div class="card" style="background:var(--acc2);border-color:var(--acc3);"><b>Suggested recipe:</b> for each module, watch the 3Blue1Brown video first (intuition), read the lesson, watch a worked-examples video, then do the quiz and drills. If a whole week feels rough, find that topic in Professor Leonard’s playlist above and let him re-teach it.</div>';
+  mainEl.innerHTML = h;
+  wireVideos(mainEl);
+}
+
+/* ================= study plan ================= */
+var PLAN = [
+{id:"w1", dates:"Jul 6–12", label:"Week 1", title:"Foundations refresher", desc:"Module 1 (Foundations). Get exponents, logs, e, factorials and Σ-notation automatic. Do every drill.", mods:[0]},
+{id:"w2", dates:"Jul 13–19", label:"Week 2", title:"Limits", desc:"Module 2. Focus on limits at infinity and the (1 + x/n)^n → e^x limit — they return in Week 8 of your actual course.", mods:[1]},
+{id:"w3", dates:"Jul 20–26", label:"Week 3", title:"Derivatives: concept & power rule", desc:"Module 3, plus start Module 4. Differentiate 20 polynomials until it's boring.", mods:[2]},
+{id:"w4", dates:"Jul 27–Aug 2", label:"Week 4", title:"Chain rule, product rule, L'Hôpital", desc:"Finish Module 4, then Module 5. This is the single most important week — the syllabus names these rules explicitly.", mods:[3,4]},
+{id:"w5", dates:"Aug 3–9", label:"Week 5", title:"Integration basics", desc:"Module 6. Antiderivatives and the Fundamental Theorem. Start thinking 'probability = area'.", mods:[5]},
+{id:"w6", dates:"Aug 10–16", label:"Week 6", title:"Substitution, by parts, improper integrals", desc:"Module 7. The week that unlocks continuous distributions. Master ∫₀^∞ x e^(−x) dx = 1.", mods:[6]},
+{id:"w7", dates:"Aug 17–23", label:"Week 7", title:"Series & partial derivatives", desc:"Module 8 (series) and first half of Module 9. Geometric series + e^x series = free points in Ch. 4.", mods:[7]},
+{id:"w8", dates:"Aug 24–30", label:"Week 8", title:"Double integrals & capstone", desc:"Finish Module 9, then Module 10 (capstone). Take the final quiz. You should hit ≥80% on every module quiz.", mods:[8,9]},
+{id:"w9", dates:"Aug 31–Sep 1", label:"Buffer", title:"Review & rest", desc:"Retake your two weakest quizzes. Print the formula sheet. First class: Wednesday Sept 2, 10am, 1WP-464.", mods:[]}
+];
+/* ================= formula sheet ================= */
+var REFERENCE = [
+{h:"Derivatives", lines:[
+R`$\frac{d}{dx}x^n = nx^{n-1}$`,
+R`$\frac{d}{dx}e^x = e^x \qquad \frac{d}{dx}e^{g(x)} = g'(x)e^{g(x)}$`,
+R`$\frac{d}{dx}\ln x = \frac{1}{x} \qquad \frac{d}{dx}\ln g(x) = \frac{g'(x)}{g(x)}$`,
+R`Product: $(fg)' = f'g + fg'$`,
+R`Quotient: $\left(\frac{f}{g}\right)' = \frac{f'g - fg'}{g^2}$`,
+R`Chain: $[f(g(x))]' = f'(g(x))\,g'(x)$`
+]},
+{h:"Max / Min & L'Hôpital", lines:[
+R`Critical points: solve $f'(x) = 0$`,
+R`$f''<0$: max; $\;f''>0$: min`,
+R`L'Hôpital (only for $\frac00$ or $\frac{\infty}{\infty}$): $\lim\frac{f}{g} = \lim\frac{f'}{g'}$`,
+R`$\lim_{x\to\infty}\frac{x^n}{e^x} = 0$ — exponentials beat polynomials`,
+R`$\lim_{n\to\infty}(1 + \frac{x}{n})^n = e^x$`
+]},
+{h:"Integrals", lines:[
+R`$\int x^n dx = \frac{x^{n+1}}{n+1} + C\ (n\ne-1) \qquad \int \frac{1}{x}dx = \ln|x| + C$`,
+R`$\int e^{kx} dx = \frac{1}{k}e^{kx} + C$`,
+R`FTC: $\int_a^b f = F(b) - F(a)$ where $F' = f$`,
+R`Substitution: $u = $ inside, $du = u'\,dx$; convert everything`,
+R`By parts: $\int u\,dv = uv - \int v\,du$ ($u$ = what simplifies)`,
+R`$\int_0^\infty e^{-\lambda x} dx = \frac{1}{\lambda} \qquad \int_0^\infty x e^{-\lambda x} dx = \frac{1}{\lambda^2}$`
+]},
+{h:"Series", lines:[
+R`Geometric ($|r|<1$): $\sum_{k=0}^\infty r^k = \frac{1}{1-r}$; from $k{=}1$: $\frac{r}{1-r}$`,
+R`Derivative trick: $\sum_{k=1}^\infty k r^{k-1} = \frac{1}{(1-r)^2}$`,
+R`$e^x = \sum_{k=0}^\infty \frac{x^k}{k!}$`,
+R`Small $x$: $e^x \approx 1+x$, $\ \ln(1+x) \approx x$`,
+R`$\sum_{k=1}^n k = \frac{n(n+1)}{2}$`
+]},
+{h:"Multivariable", lines:[
+R`$\frac{\partial f}{\partial x}$: differentiate in $x$, treat $y$ as constant`,
+R`Double integral: inside-out, $\int_c^d\left(\int_a^b f\,dx\right)dy$`,
+R`Inner limits may depend on outer variable (sketch the region!)`,
+R`$f(x,y) = g(x)h(y)$ on a rectangle $\Rightarrow$ product of single integrals`
+]},
+{h:"Probability Connections", lines:[
+R`$P(a \le X \le b) = \int_a^b f(x)\,dx$; total: $\int f = 1$`,
+R`$F(x) = \int_{-\infty}^x f(t)dt \qquad f = F'$`,
+R`$E[X] = \int x f(x)\,dx \qquad \mathrm{Var}(X) = E[X^2] - E[X]^2$`,
+R`Exponential($\lambda$): $f = \lambda e^{-\lambda x}$, $F = 1 - e^{-\lambda x}$, $E[X] = \frac{1}{\lambda}$`,
+R`Marginal: $f_X(x) = \int f(x,y)\,dy$`,
+R`$\binom{n}{k} = \frac{n!}{k!(n-k)!}$ — Ch. 1 combinatorics`
+]}
+];
+/* ================= progress helpers ================= */
+function quizPct(m){ return store.quizBest[m.id] || 0; }
+function drillCount(m){ var d = store.drillsOk[m.id] || {}; var n = 0; for(var k in d){ if(d[k]) n++; } return n; }
+function modStatus(m){
+  var passed = quizPct(m) >= 80;
+  var visited = !!store.visited[m.id];
+  if(passed && visited) return "done";
+  if(visited || quizPct(m) > 0 || drillCount(m) > 0) return "part";
+  return "todo";
+}
+function overallPct(){
+  var total = 0;
+  MODULES.forEach(function(m){
+    var p = 0;
+    if(store.visited[m.id]) p += 30;
+    p += Math.min(quizPct(m), 100) * 0.4;
+    p += Math.min(drillCount(m) / m.drills.length, 1) * 30;
+    total += Math.min(p, 100);
+  });
+  return Math.round(total / MODULES.length);
+}
+/* ================= rendering ================= */
+var mainEl = document.getElementById("main");
+var sideEl = document.getElementById("sidebar");
+var current = {page:"home"};
+
+function renderSidebar(){
+  var h = '<div class="brand"><h1>Calc <span>→</span> Probability</h1><p>Summer bootcamp · Fall 2026 prep</p></div>';
+  h += '<div class="navsec">Overview</div>';
+  h += navBtn("home", "⌂", "Dashboard");
+  h += navBtn("plan", "📅", "Study Plan");
+  h += navBtn("ref", "📋", "Formula Sheet");
+  h += navBtn("library", "▶", "Video Library");
+  h += '<div class="navsec">Modules</div>';
+  MODULES.forEach(function(m, i){
+    var st = modStatus(m);
+    var num = st === "done" ? '<span class="navnum done">✓</span>' : '<span class="navnum">' + (i+1) + '</span>';
+    var cls = (current.page === m.id) ? "navitem active" : "navitem";
+    h += '<button class="' + cls + '" data-page="' + m.id + '">' + num + '<span class="navlabel">' + m.short + '</span></button>';
+  });
+  sideEl.innerHTML = h;
+  sideEl.querySelectorAll(".navitem").forEach(function(b){
+    b.addEventListener("click", function(){ go(b.getAttribute("data-page")); });
+  });
+}
+function navBtn(page, icon, label){
+  var cls = (current.page === page) ? "navitem active" : "navitem";
+  return '<button class="' + cls + '" data-page="' + page + '"><span style="width:21px;text-align:center;flex-shrink:0">' + icon + '</span><span class="navlabel">' + label + '</span></button>';
+}
+
+function go(page, tab){
+  current.page = page;
+  if(tab) store.tab[page] = tab;
+  if(page === "home") renderHome();
+  else if(page === "plan") renderPlan();
+  else if(page === "ref") renderRef();
+  else if(page === "library") renderLibrary();
+  else {
+    var idx = MODULES.findIndex(function(m){ return m.id === page; });
+    if(idx >= 0) renderModule(idx);
+  }
+  renderSidebar();
+  window.scrollTo(0,0);
+}
+
+/* ---------- home ---------- */
+function renderHome(){
+  var pct = overallPct();
+  var done = MODULES.filter(function(m){ return modStatus(m) === "done"; }).length;
+  var quizzes = MODULES.filter(function(m){ return quizPct(m) >= 80; }).length;
+  var drills = MODULES.reduce(function(s,m){ return s + drillCount(m); }, 0);
+  var totalDrills = MODULES.reduce(function(s,m){ return s + m.drills.length; }, 0);
+  var days = Math.max(0, Math.ceil((new Date(2026,8,2) - new Date()) / 86400000));
+  var h = '<div class="crumb">Dashboard</div><h2 class="pagetitle">Calculus for Intro to Probability</h2>' +
+    '<p class="pagesub">Everything your syllabus requires (26:960:575, Prof. Yang, Fall 2026): differentiation with chain &amp; product rule, partial derivatives, integration by substitution &amp; parts, double integrals, and L’Hôpital’s rule — taught from zero.</p>';
+  h += '<div class="statgrid">' +
+    stat(pct + "%", "Overall progress", pct) +
+    stat(done + " / " + MODULES.length, "Modules mastered") +
+    stat(quizzes + " / " + MODULES.length, "Quizzes passed (≥80%)") +
+    stat(drills + " / " + totalDrills, "Drills solved") +
+    stat(days, "Days until first class") +
+    '</div>';
+  h += '<div class="card"><h3 style="font-size:16px;font-weight:750;margin-bottom:6px;">Modules</h3>';
+  MODULES.forEach(function(m, i){
+    var st = modStatus(m);
+    var chip = st === "done" ? '<span class="chip done">Mastered</span>' : st === "part" ? '<span class="chip part">In progress</span>' : '<span class="chip todo">Not started</span>';
+    var qb = quizPct(m) > 0 ? ('Quiz best: ' + quizPct(m) + '%') : (m.quiz.length + ' quiz Qs');
+    h += '<div class="modrow" data-page="' + m.id + '">' +
+      '<span class="navnum' + (st==="done" ? " done" : "") + '" style="width:26px;height:26px;font-size:12px;">' + (st==="done" ? "✓" : (i+1)) + '</span>' +
+      '<div><div class="mrtitle">' + m.title + '</div><div class="mrsub">' + m.week + ' · ' + qb + ' · ' + drillCount(m) + '/' + m.drills.length + ' drills</div></div>' +
+      '<div class="mrright">' + chip + '</div></div>';
+  });
+  h += '</div>';
+  h += '<div class="card" style="background:var(--acc2);border-color:var(--acc3);"><b>How to use this app:</b> each module = read the <b>Lesson</b> (20–40 min), watch the <b>Videos</b>, pass the <b>Quiz</b> at 80%+, then grind the <b>Practice</b> drills. Modules build on each other — go in order. Your progress saves automatically in this browser.</div>';
+  h += '<p class="footer-note">Built for Ross, <i>A First Course in Probability</i> (10th ed.) · Math rendering needs an internet connection</p>';
+  mainEl.innerHTML = h;
+  mainEl.querySelectorAll(".modrow").forEach(function(r){
+    r.addEventListener("click", function(){ go(r.getAttribute("data-page")); });
+  });
+  mathify(mainEl);
+}
+function stat(big, lbl, barPct){
+  var bar = (typeof barPct === "number") ? '<div class="pbar"><div style="width:' + barPct + '%"></div></div>' : "";
+  return '<div class="stat"><div class="big">' + big + '</div><div class="lbl">' + lbl + '</div>' + bar + '</div>';
+}
+
+/* ---------- plan ---------- */
+function renderPlan(){
+  var now = new Date();
+  var h = '<div class="crumb">Study Plan</div><h2 class="pagetitle">8 Weeks to Ready</h2>' +
+    '<p class="pagesub">First class is Wednesday, September 2, 2026. One module a week with two heavier weeks — roughly 4–6 focused hours per week. Check off weeks as you finish them.</p>';
+  var ranges = [
+    [new Date(2026,6,6), new Date(2026,6,13)], [new Date(2026,6,13), new Date(2026,6,20)],
+    [new Date(2026,6,20), new Date(2026,6,27)], [new Date(2026,6,27), new Date(2026,7,3)],
+    [new Date(2026,7,3), new Date(2026,7,10)], [new Date(2026,7,10), new Date(2026,7,17)],
+    [new Date(2026,7,17), new Date(2026,7,24)], [new Date(2026,7,24), new Date(2026,7,31)],
+    [new Date(2026,7,31), new Date(2026,8,2)]
+  ];
+  PLAN.forEach(function(w, i){
+    var isCurrent = now >= ranges[i][0] && now < ranges[i][1];
+    var mods = w.mods.map(function(mi){
+      return '<button class="btn ghost small" data-page="' + MODULES[mi].id + '" style="margin:6px 6px 0 0;">Open: ' + MODULES[mi].short + '</button>';
+    }).join("");
+    var checked = store.weeks[w.id] ? "checked" : "";
+    h += '<div class="week' + (isCurrent ? " current" : "") + '">' +
+      '<div class="wknum">' + w.label + '<small>' + w.dates + '</small></div>' +
+      '<div class="wkbody"><h4>' + w.title + (isCurrent ? ' <span class="chip part">This week</span>' : '') + '</h4><p>' + w.desc + '</p>' + mods +
+      '<label class="wkcheck"><input type="checkbox" data-week="' + w.id + '" ' + checked + '> Week completed</label></div></div>';
+  });
+  mainEl.innerHTML = h;
+  mainEl.querySelectorAll("input[data-week]").forEach(function(cb){
+    cb.addEventListener("change", function(){ store.weeks[cb.getAttribute("data-week")] = cb.checked; save(); });
+  });
+  mainEl.querySelectorAll("button[data-page]").forEach(function(b){
+    b.addEventListener("click", function(){ go(b.getAttribute("data-page")); });
+  });
+}
+
+/* ---------- reference ---------- */
+function renderRef(){
+  var h = '<div class="crumb">Reference</div><h2 class="pagetitle">Formula Sheet</h2>' +
+    '<p class="pagesub">Everything on one page. Your exams allow a one-page cram sheet (front and back) — practice condensing this into your own handwriting.</p>' +
+    '<button class="btn printbtn" onclick="window.print()">Print / Save as PDF</button>' +
+    '<div class="refgrid">';
+  REFERENCE.forEach(function(sec){
+    h += '<div class="refcard"><h4>' + sec.h + '</h4>';
+    sec.lines.forEach(function(l){ h += '<div class="rline">' + l + '</div>'; });
+    h += '</div>';
+  });
+  h += '</div>';
+  mainEl.innerHTML = h;
+  mathify(mainEl);
+}
+
+/* ---------- module ---------- */
+function renderModule(idx){
+  var m = MODULES[idx];
+  store.visited[m.id] = true; save();
+  var tab = store.tab[m.id] || "lesson";
+  var h = '<div class="crumb">Module ' + (idx+1) + ' of ' + MODULES.length + ' · ' + m.week + '</div>' +
+    '<h2 class="pagetitle">' + m.title + '</h2><p class="pagesub">' + m.sub + '</p>';
+  h += '<div class="mtabs">' +
+    mtab(m, "lesson", "Lesson", tab) +
+    mtab(m, "videos", "Videos <span class=cnt>(" + (VIDEOS[m.id]||[]).length + ")</span>", tab) +
+    mtab(m, "quiz", "Quiz <span class=cnt>(" + m.quiz.length + ")</span>", tab) +
+    mtab(m, "drills", "Practice <span class=cnt>(" + drillCount(m) + "/" + m.drills.length + ")</span>", tab) +
+    '</div>';
+  h += '<div id="modbody"></div>';
+  h += '<div class="next">' +
+    (idx > 0 ? '<button class="btn ghost" data-page="' + MODULES[idx-1].id + '">← ' + MODULES[idx-1].short + '</button>' : '<span></span>') +
+    (idx < MODULES.length-1 ? '<button class="btn" data-page="' + MODULES[idx+1].id + '">Next: ' + MODULES[idx+1].short + ' →</button>' : '<button class="btn" data-page="home">Finish → Dashboard</button>') +
+    '</div>';
+  mainEl.innerHTML = h;
+  mainEl.querySelectorAll(".mtab").forEach(function(b){
+    b.addEventListener("click", function(){ store.tab[m.id] = b.getAttribute("data-tab"); save(); renderModule(idx); });
+  });
+  mainEl.querySelectorAll(".next button").forEach(function(b){
+    b.addEventListener("click", function(){ go(b.getAttribute("data-page")); });
+  });
+  var body = document.getElementById("modbody");
+  if(tab === "lesson"){ body.innerHTML = '<div class="card lesson">' + m.lesson + '</div>'; }
+  else if(tab === "videos"){ renderVideosTab(m, body); }
+  else if(tab === "quiz"){ renderQuiz(m, body); }
+  else { renderDrills(m, body); }
+  mathify(body);
+}
+function mtab(m, id, label, active){
+  return '<button class="mtab' + (active === id ? " active" : "") + '" data-tab="' + id + '">' + label + '</button>';
+}
+
+/* ---------- quiz ---------- */
+function renderQuiz(m, body){
+  var best = quizPct(m);
+  var h = '<div class="card"><p style="font-size:14px;color:var(--ink2);margin-bottom:18px;">Answer every question. <b>80% or higher</b> marks this module as mastered. Best so far: <b>' + best + '%</b>. You can retake it as many times as you like.</p>';
+  m.quiz.forEach(function(q, qi){
+    h += '<div class="qq" data-q="' + qi + '"><div class="qtext">' + (qi+1) + '. ' + q.q + '</div><div class="opts">';
+    q.opts.forEach(function(o, oi){
+      h += '<button class="opt" data-o="' + oi + '">' + o + '</button>';
+    });
+    h += '</div><div class="expl">' + q.expl + '</div></div>';
+  });
+  h += '<div class="quizfoot"><span class="score" id="qscore"></span><button class="btn ghost small" id="qreset">Reset quiz</button></div></div>';
+  body.innerHTML = h;
+  var answered = {}, correct = 0;
+  function finishCheck(){
+    var n = Object.keys(answered).length;
+    var el = document.getElementById("qscore");
+    if(n === m.quiz.length){
+      var pct = Math.round(100 * correct / m.quiz.length);
+      var badge = pct >= 80 ? '<span class="scorebadge pass">PASSED ✓</span>' : '<span class="scorebadge fail">Below 80% — review &amp; retake</span>';
+      el.innerHTML = 'Score: ' + correct + '/' + m.quiz.length + ' (' + pct + '%) ' + badge;
+      if(pct > (store.quizBest[m.id] || 0)){ store.quizBest[m.id] = pct; save(); renderSidebar(); }
+    } else {
+      el.textContent = n + '/' + m.quiz.length + ' answered';
+    }
+  }
+  body.querySelectorAll(".qq").forEach(function(qEl){
+    var qi = +qEl.getAttribute("data-q");
+    var q = m.quiz[qi];
+    qEl.querySelectorAll(".opt").forEach(function(btn){
+      btn.addEventListener("click", function(){
+        if(answered[qi] !== undefined) return;
+        var oi = +btn.getAttribute("data-o");
+        answered[qi] = oi;
+        if(oi === q.c){ btn.classList.add("sel-ok"); correct++; }
+        else {
+          btn.classList.add("sel-bad");
+          qEl.querySelectorAll(".opt")[q.c].classList.add("reveal");
+        }
+        qEl.querySelector(".expl").classList.add("show");
+        qEl.querySelectorAll(".opt").forEach(function(b){ b.disabled = true; });
+        finishCheck();
+      });
+    });
+  });
+  document.getElementById("qreset").addEventListener("click", function(){ renderQuiz(m, body); mathify(body); });
+  finishCheck();
+}
+
+/* ---------- drills ---------- */
+function renderDrills(m, body){
+  var got = store.drillsOk[m.id] || {};
+  var h = '<div class="card"><p style="font-size:14px;color:var(--ink2);margin-bottom:18px;">Type your answer and press Check (or Enter). Formatting is forgiving — <code>3x^2</code>, <code>1/2</code>, <code>0.5</code>, <code>e^(-2)</code> all work where sensible. Stuck? Open the solution — reading worked solutions is studying, not cheating.</p>';
+  m.drills.forEach(function(d, di){
+    var okBefore = got[di];
+    h += '<div class="drill" data-d="' + di + '"><div class="dq">' + (di+1) + '. ' + d.q + '</div>' +
+      '<div class="drillrow"><input type="text" placeholder="your answer" ' + (okBefore ? 'value="✓ solved" disabled class="ok"' : '') + '>' +
+      '<button class="btn small">Check</button><span class="dmark' + (okBefore ? ' ok' : '') + '">' + (okBefore ? "Solved ✓" : "") + '</span></div>' +
+      (d.hint ? '<div class="hinttag">Hint: ' + d.hint + '</div>' : '') +
+      '<details class="sol"><summary>Show solution</summary><div class="solbody">' + d.sol + '</div></details></div>';
+  });
+  h += '</div>';
+  body.innerHTML = h;
+  body.querySelectorAll(".drill").forEach(function(dEl){
+    var di = +dEl.getAttribute("data-d");
+    var d = m.drills[di];
+    var input = dEl.querySelector("input");
+    var mark = dEl.querySelector(".dmark");
+    function doCheck(){
+      if(input.disabled) return;
+      var ok = checkAnswer(d, input.value);
+      input.classList.remove("ok","bad");
+      input.classList.add(ok ? "ok" : "bad");
+      mark.className = "dmark " + (ok ? "ok" : "bad");
+      mark.textContent = ok ? "Correct ✓" : "Not yet — try again";
+      if(ok){
+        if(!store.drillsOk[m.id]) store.drillsOk[m.id] = {};
+        store.drillsOk[m.id][di] = true; save(); renderSidebar();
+      }
+    }
+    dEl.querySelector("button").addEventListener("click", doCheck);
+    input.addEventListener("keydown", function(e){ if(e.key === "Enter") doCheck(); });
+  });
+  var solDetails = body.querySelectorAll("details.sol");
+  solDetails.forEach(function(det){
+    det.addEventListener("toggle", function(){ if(det.open) mathify(det); });
+  });
+}
+
+/* ================= boot ================= */
+function boot(){ renderSidebar(); go("home"); }
+if(document.readyState === "loading"){ document.addEventListener("DOMContentLoaded", boot); } else { boot(); }
+</script>
+</body>
+</html>
