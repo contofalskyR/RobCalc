@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Calculus for Probability — Summer Bootcamp</title>
+<title>Calculus for Probability — Fall 2026 Catch-Up</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
@@ -234,7 +234,7 @@ var MODULES = [
 {
 id:"m0", title:"Foundations: Algebra & Precalc Refresher", short:"Foundations",
 sub:"Functions, exponents, logarithms, e, factorials, and summation notation — the language everything else is written in.",
-week:"Week 1",
+week:"Diagnostic quiz first",
 lesson: R`
 <h3>1. Functions</h3>
 <p>A <b>function</b> is a rule that takes an input and produces exactly one output. We write $f(x) = x^2$ to mean "the function $f$ takes $x$ and returns $x^2$." So $f(3) = 9$ and $f(-2) = 4$.</p>
@@ -272,7 +272,7 @@ lesson: R`
 <div class="eq">$$\binom{n}{k} = \frac{n!}{k!\,(n-k)!}$$</div>
 <p>counts the number of ways to choose $k$ items from $n$. Example: $\binom{5}{2} = \frac{120}{2\cdot 6} = 10$.</p>
 <div class="prob"><div class="extag">Why this matters for probability</div>
-<p>Your course starts (Sept 2, Chapter 1) with combinatorial analysis — it is built entirely on factorials and $\binom{n}{k}$. This is the one topic you'll need on day one.</p></div>
+<p>Your course's Chapter 1 is combinatorial analysis — it is built entirely on factorials and $\binom{n}{k}$. It stays in play all the way through the midterm.</p></div>
 
 <h3>6. Summation notation</h3>
 <p>$\displaystyle\sum_{k=1}^{n} a_k$ means "add up $a_k$ for $k = 1, 2, \ldots, n$." For example:</p>
@@ -307,7 +307,7 @@ drills:[
 {
 id:"m1", title:"Limits", short:"Limits",
 sub:"What a function approaches. The concept underneath derivatives, integrals, L'Hôpital, and every limit theorem in Chapter 8.",
-week:"Week 2",
+week:"Skim §3 before midterm · finish by Nov 18",
 lesson: R`
 <h3>1. The idea</h3>
 <p>The <b>limit</b> of $f(x)$ as $x$ approaches $a$, written $\displaystyle\lim_{x\to a} f(x)$, is the value $f(x)$ gets close to as $x$ gets close to $a$ — regardless of what happens exactly <i>at</i> $a$.</p>
@@ -362,7 +362,7 @@ drills:[
 {
 id:"m2", title:"Derivatives I: Concept & Power Rule", short:"Derivatives I",
 sub:"The derivative measures how fast a function changes. Here you learn what it means and how to differentiate polynomials.",
-week:"Week 3",
+week:"Before midterm · Block 1",
 lesson: R`
 <h3>1. What a derivative is</h3>
 <p>The <b>derivative</b> of $f$ at a point measures the <b>instantaneous rate of change</b> — the slope of the graph at that exact point. Notation: $f'(x)$ (say "f prime") or $\dfrac{df}{dx}$. Both mean the same thing.</p>
@@ -426,7 +426,7 @@ drills:[
 {
 id:"m3", title:"Derivatives II: e, ln, Product, Quotient & Chain Rule", short:"Derivatives II",
 sub:"The rules your syllabus explicitly names: product rule and chain rule, plus the derivatives of e^x and ln x.",
-week:"Week 3–4",
+week:"Before midterm · Block 2",
 lesson: R`
 <h3>1. Two derivatives to memorize cold</h3>
 <div class="keybox"><div class="extag">Memorize</div>
@@ -495,7 +495,7 @@ drills:[
 {
 id:"m4", title:"Using Derivatives: Max/Min & L'Hôpital's Rule", short:"Max/Min & L'Hôpital",
 sub:"Finding peaks of functions, and the rule your syllabus names for evaluating 0/0 limits.",
-week:"Week 4",
+week:"After midterm",
 lesson: R`
 <h3>1. Finding maxima and minima</h3>
 <p>Recipe for locating the peak or valley of a smooth function:</p>
@@ -549,7 +549,7 @@ drills:[
 {
 id:"m5", title:"Integrals I: Antiderivatives & the Fundamental Theorem", short:"Integrals I",
 sub:"Integration reverses differentiation and computes area under curves — which in probability means computing probabilities.",
-week:"Week 5",
+week:"Before midterm · Block 2",
 lesson: R`
 <h3>1. The two faces of the integral</h3>
 <p><b>Face 1 — area:</b> the definite integral $\displaystyle\int_a^b f(x)\,dx$ is the area between the graph of $f$ and the $x$-axis, from $x=a$ to $x=b$.</p>
@@ -612,7 +612,7 @@ drills:[
 {
 id:"m6", title:"Integrals II: Substitution, By Parts & Improper Integrals", short:"Integrals II",
 sub:"The two integration techniques your syllabus names, plus integrals to infinity — the bread and butter of continuous probability.",
-week:"Week 6",
+week:"Before midterm · Block 3",
 lesson: R`
 <h3>1. Substitution (the chain rule, reversed)</h3>
 <p>When the integrand contains a function <i>and</i> its derivative, substitute $u$ for the inner function:</p>
@@ -676,7 +676,7 @@ drills:[
 {
 id:"m7", title:"Infinite Series: Geometric & the e^x Series", short:"Series",
 sub:"Not on the official prereq list, but Ross uses these constantly for discrete distributions. Thirty minutes here saves hours in Chapter 4.",
-week:"Week 7",
+week:"Before midterm · Block 1",
 lesson: R`
 <h3>1. What an infinite series is</h3>
 <p>An infinite series $\displaystyle\sum_{k=0}^{\infty} a_k$ is the limit of adding more and more terms. If the running total settles at a finite number, the series <b>converges</b> to it.</p>
@@ -733,7 +733,7 @@ drills:[
 {
 id:"m8", title:"Multivariable: Partial Derivatives & Double Integrals", short:"Partials & Double ∫",
 sub:"Functions of two variables — required for jointly distributed random variables (Ross Ch. 6, on your syllabus by name).",
-week:"Week 7–8",
+week:"Before Oct 28 (Chapter 6)",
 lesson: R`
 <h3>1. Functions of two variables</h3>
 <p>$f(x,y)$ takes <i>two</i> inputs and returns one number, e.g. $f(x,y) = x^2 y + e^{x+y}$. Its graph is a surface over the $xy$-plane. In probability, a <b>joint density</b> $f(x,y)$ describes two random variables at once — e.g. height and weight of a random person.</p>
@@ -789,7 +789,7 @@ drills:[
 {
 id:"m9", title:"Capstone: The Calculus of Probability", short:"Capstone",
 sub:"Everything assembled into the exact moves your course will ask for: densities, CDFs, expected values, and normalizing constants.",
-week:"Week 8",
+week:"Moves 1–3 before midterm",
 lesson: R`
 <h3>The five moves</h3>
 <p>Continuous probability (Ross Ch. 5–7) is built from five calculus moves. You now know all of them — this module drills the assembly.</p>
@@ -860,7 +860,7 @@ var VIDEOS = {
 m0:[
  {id:"kL8Mx0gBDiw", t:"Logarithms - It's Not That Difficult!", ch:"The Organic Chemistry Tutor", len:"21 min", note:"Watch if the logarithm section felt shaky. Evaluating logs from scratch, no prerequisites."},
  {id:"XJnIdRXUi7A", t:"Permutations and Combinations Tutorial", ch:"The Organic Chemistry Tutor", note:"Factorials and n-choose-k in action. This is literally your course's Week 1 material (Ross Ch. 1), so it pays double."},
- {id:"WsQQvHm4lSw", t:"Understand Calculus in 35 Minutes", ch:"The Organic Chemistry Tutor", len:"35 min", note:"Optional big-picture preview of everything you'll learn this summer. Don't worry about following the details yet."}
+ {id:"WsQQvHm4lSw", t:"Understand Calculus in 35 Minutes", ch:"The Organic Chemistry Tutor", len:"35 min", note:"Optional big-picture preview of everything in these modules. Don't worry about following the details yet."}
 ],
 m1:[
  {id:"WUvTyaaNkzM", t:"The Essence of Calculus (Chapter 1)", ch:"3Blue1Brown", len:"17 min", note:"The best 17 minutes of calculus motivation ever made. Watch before anything else in this module."},
@@ -901,8 +901,8 @@ m9:[
 ]
 };
 var COURSES = [
- {pl:"PLF797E961509B4EB5", thumb:"54_XRjHhZzI", t:"Calculus 1 (Full Length Lectures)", ch:"Professor Leonard", note:"A complete ~39-hour college Calc 1 course. If you want real lectures for the whole summer, this is the gold standard. Follow it alongside modules 2–7."},
- {pl:"PLZHQObOWTQDMsr9K-rj53DwVRMYO3t5Yr", thumb:"WUvTyaaNkzM", t:"Essence of Calculus (Complete Series)", ch:"3Blue1Brown", note:"All 12 chapters of the visual intuition series. Roughly 3 hours total — worth watching in full over the summer."}
+ {pl:"PLF797E961509B4EB5", thumb:"54_XRjHhZzI", t:"Calculus 1 (Full Length Lectures)", ch:"Professor Leonard", note:"A complete ~39-hour college Calc 1 course. If you want real lectures, this is the gold standard. Follow it alongside modules 2–7."},
+ {pl:"PLZHQObOWTQDMsr9K-rj53DwVRMYO3t5Yr", thumb:"WUvTyaaNkzM", t:"Essence of Calculus (Complete Series)", ch:"3Blue1Brown", note:"All 12 chapters of the visual intuition series. Roughly 3 hours total — worth watching in full."}
 ];
 var EXT_LINKS = [
  {t:"MIT OpenCourseWare 18.01SC: Single Variable Calculus", url:"https://ocw.mit.edu/courses/18-01sc-single-variable-calculus-fall-2010/", note:"Free full MIT course: lecture videos, notes, problem sets with solutions, exams."},
@@ -944,7 +944,7 @@ function renderVideosTab(m, body){
 }
 function renderLibrary(){
   var h = '<div class="crumb">Video Library</div><h2 class="pagetitle">Lectures & Full Courses</h2>' +
-    '<p class="pagesub">Module-specific videos live in each module’s <b>Videos</b> tab. This page collects the full-length courses if you want a deeper companion for the whole summer.</p>';
+    '<p class="pagesub">Module-specific videos live in each module’s <b>Videos</b> tab. This page collects the full-length courses if you want a deeper companion.</p>';
   h += '<div class="card"><h3 style="font-size:16px;font-weight:750;margin-bottom:12px;">Full video courses (playable here)</h3>';
   COURSES.forEach(function(c){ h += ytCard(c); });
   h += '</div>';
@@ -962,15 +962,16 @@ function renderLibrary(){
 
 /* ================= study plan ================= */
 var PLAN = [
-{id:"w1", dates:"Jul 6–12", label:"Week 1", title:"Foundations refresher", desc:"Module 1 (Foundations). Get exponents, logs, e, factorials and Σ-notation automatic. Do every drill.", mods:[0]},
-{id:"w2", dates:"Jul 13–19", label:"Week 2", title:"Limits", desc:"Module 2. Focus on limits at infinity and the (1 + x/n)^n → e^x limit — they return in Week 8 of your actual course.", mods:[1]},
-{id:"w3", dates:"Jul 20–26", label:"Week 3", title:"Derivatives: concept & power rule", desc:"Module 3, plus start Module 4. Differentiate 20 polynomials until it's boring.", mods:[2]},
-{id:"w4", dates:"Jul 27–Aug 2", label:"Week 4", title:"Chain rule, product rule, L'Hôpital", desc:"Finish Module 4, then Module 5. This is the single most important week — the syllabus names these rules explicitly.", mods:[3,4]},
-{id:"w5", dates:"Aug 3–9", label:"Week 5", title:"Integration basics", desc:"Module 6. Antiderivatives and the Fundamental Theorem. Start thinking 'probability = area'.", mods:[5]},
-{id:"w6", dates:"Aug 10–16", label:"Week 6", title:"Substitution, by parts, improper integrals", desc:"Module 7. The week that unlocks continuous distributions. Master ∫₀^∞ x e^(−x) dx = 1.", mods:[6]},
-{id:"w7", dates:"Aug 17–23", label:"Week 7", title:"Series & partial derivatives", desc:"Module 8 (series) and first half of Module 9. Geometric series + e^x series = free points in Ch. 4.", mods:[7]},
-{id:"w8", dates:"Aug 24–30", label:"Week 8", title:"Double integrals & capstone", desc:"Finish Module 9, then Module 10 (capstone). Take the final quiz. You should hit ≥80% on every module quiz.", mods:[8,9]},
-{id:"w9", dates:"Aug 31–Sep 1", label:"Buffer", title:"Review & rest", desc:"Retake your two weakest quizzes. Print the formula sheet. First class: Wednesday Sept 2, 10am, 1WP-464.", mods:[]}
+{id:"f1", from:[2026,9,7], to:[2026,9,11], dates:"Oct 7–10", label:"Block 1", title:"Power rule + infinite series", desc:"Take the Module 1 quiz as a diagnostic and read only the sections you miss. Then Module 3 (short: what a derivative is, power rule) and Module 8. Geometric and e^x series are what the geometric and Poisson distributions in Chapter 4 run on, so this pays off on HW1 right away.", mods:[0,2,7]},
+{id:"f2", from:[2026,9,11], to:[2026,9,15], dates:"Oct 11–14", label:"Block 2", title:"Chain rule + first integrals", desc:"Module 4: derivatives of e^x and ln x, product rule, chain rule (the quotient rule can wait). Module 6: antiderivatives and definite integrals, which is how Chapter 5 turns a density into a probability. HW1 is due in class Wed Oct 14, and that class is the review session.", mods:[3,5]},
+{id:"f3", from:[2026,9,15], to:[2026,9,19], dates:"Oct 15–18", label:"Block 3", title:"Integration techniques + the probability moves", desc:"Module 7: substitution, by parts, and integrals to infinity. Master ∫₀^∞ x e^(−x) dx = 1. Then Capstone Moves 1–3 only: normalizing constant, density ↔ CDF, expected value. If integrals to infinity feel shaky, read Module 2 section 3 (limits at infinity).", mods:[6,9,1]},
+{id:"f4", from:[2026,9,19], to:[2026,9,21], dates:"Oct 19–20", label:"Block 4", title:"Cram sheet + practice. No new calculus.", desc:"Stop learning new material. Build your one-page cram sheet (front and back) from the Formula Sheet page plus a table of every distribution: formula, mean, variance. Redo HW1 without notes and work Chapter 1–5 problems by hand, since calculators are not allowed.", mods:[]},
+{id:"f5", from:[2026,9,21], to:[2026,9,22], dates:"Wed Oct 21", label:"Exam", title:"Midterm exam", desc:"One-page cram sheet allowed, front and back. No calculators or other electronics.", mods:[], check:"Done"},
+{id:"f6", from:[2026,9,22], to:[2026,9,28], dates:"Oct 22–27", label:"Block 5", title:"Two variables, before Chapter 6", desc:"Chapter 6 (jointly distributed random variables) starts Wed Oct 28 and is built on double integrals. Finish the Module 9 lesson and quiz before that lecture.", mods:[8]},
+{id:"f7", from:[2026,9,28], to:[2026,10,4], dates:"Oct 28–Nov 3", label:"Block 6", title:"Double-integral drills + full capstone", desc:"Finish the Module 9 drills. Then Capstone Moves 4–5 and the full capstone quiz.", mods:[8,9]},
+{id:"f8", from:[2026,10,4], to:[2026,10,18], dates:"Nov 4–17", label:"Block 7", title:"Max/min, L'Hôpital, limits", desc:"Module 5, then Module 2 in full. Limit theorems (Chapter 8) arrive Nov 18, and the (1 + x/n)^n → e^x limit in Module 2 section 4 is the one to own before then.", mods:[4,1]},
+{id:"f9", from:[2026,10,18], to:[2026,11,10], dates:"Nov 18–Dec 9", label:"Block 8", title:"Close the gaps", desc:"Retake any quiz under 80%, finish the remaining drills, and clear your Flagged list. No class Nov 25. HW2 is due in class Wed Dec 9.", mods:[]},
+{id:"f10", from:[2026,11,10], to:[2026,11,17], dates:"Wed Dec 16", label:"Exam", title:"Final exam", desc:"Spend Dec 10–15 rebuilding the cram sheet for the whole course and reworking HW1 and HW2 by hand.", mods:[], check:"Done"}
 ];
 /* ================= formula sheet ================= */
 var REFERENCE = [
@@ -1046,7 +1047,7 @@ var sideEl = document.getElementById("sidebar");
 var current = {page:"home"};
 
 function renderSidebar(){
-  var h = '<div class="brand"><h1>Calc <span>→</span> Probability</h1><p>Summer bootcamp · Fall 2026 prep</p></div>';
+  var h = '<div class="brand"><h1>Calc <span>→</span> Probability</h1><p>Fall 2026 · midterm-first plan</p></div>';
   h += '<div class="navsec">Overview</div>';
   h += navBtn("home", "⌂", "Dashboard");
   h += navBtn("plan", "📅", "Study Plan");
@@ -1093,7 +1094,10 @@ function renderHome(){
   var quizzes = MODULES.filter(function(m){ return quizPct(m) >= 80; }).length;
   var drills = MODULES.reduce(function(s,m){ return s + drillCount(m); }, 0);
   var totalDrills = MODULES.reduce(function(s,m){ return s + m.drills.length; }, 0);
-  var days = Math.max(0, Math.ceil((new Date(2026,8,2) - new Date()) / 86400000));
+  var nowD = new Date();
+  var beforeMid = nowD < new Date(2026,9,22);
+  var target = beforeMid ? new Date(2026,9,21) : new Date(2026,11,16);
+  var days = Math.max(0, Math.ceil((target - nowD) / 86400000));
   var h = '<div class="crumb">Dashboard</div><h2 class="pagetitle">Calculus for Intro to Probability</h2>' +
     '<p class="pagesub">Everything your syllabus requires (26:960:575, Prof. Yang, Fall 2026): differentiation with chain &amp; product rule, partial derivatives, integration by substitution &amp; parts, double integrals, and L’Hôpital’s rule — taught from zero.</p>';
   h += '<div class="statgrid">' +
@@ -1101,7 +1105,7 @@ function renderHome(){
     stat(done + " / " + MODULES.length, "Modules mastered") +
     stat(quizzes + " / " + MODULES.length, "Quizzes passed (≥80%)") +
     stat(drills + " / " + totalDrills, "Drills solved") +
-    stat(days, "Days until first class") +
+    stat(days, beforeMid ? "Days until midterm (Oct 21)" : "Days until final (Dec 16)") +
     '</div>';
   h += '<div class="card"><h3 style="font-size:16px;font-weight:750;margin-bottom:6px;">Modules</h3>';
   MODULES.forEach(function(m, i){
@@ -1114,7 +1118,7 @@ function renderHome(){
       '<div class="mrright">' + chip + '</div></div>';
   });
   h += '</div>';
-  h += '<div class="card" style="background:var(--acc2);border-color:var(--acc3);"><b>How to use this app:</b> each module = read the <b>Lesson</b> (20–40 min), watch the <b>Videos</b>, pass the <b>Quiz</b> at 80%+, then grind the <b>Practice</b> drills. Modules build on each other — go in order. Your progress saves automatically in this browser.</div>';
+  h += '<div class="card" style="background:var(--acc2);border-color:var(--acc3);"><b>How to use this app:</b> each module = read the <b>Lesson</b> (20–40 min), watch the <b>Videos</b>, pass the <b>Quiz</b> at 80%+, then grind the <b>Practice</b> drills. Follow the <b>Study Plan</b> order, which puts the midterm material first. Your progress saves automatically in this browser.</div>';
   h += '<p class="footer-note">Built for Ross, <i>A First Course in Probability</i> (10th ed.) · Math rendering needs an internet connection</p>';
   mainEl.innerHTML = h;
   mainEl.querySelectorAll(".modrow").forEach(function(r){
@@ -1130,25 +1134,25 @@ function stat(big, lbl, barPct){
 /* ---------- plan ---------- */
 function renderPlan(){
   var now = new Date();
-  var h = '<div class="crumb">Study Plan</div><h2 class="pagetitle">8 Weeks to Ready</h2>' +
-    '<p class="pagesub">First class is Wednesday, September 2, 2026. One module a week with two heavier weeks — roughly 4–6 focused hours per week. Check off weeks as you finish them.</p>';
-  var ranges = [
-    [new Date(2026,6,6), new Date(2026,6,13)], [new Date(2026,6,13), new Date(2026,6,20)],
-    [new Date(2026,6,20), new Date(2026,6,27)], [new Date(2026,6,27), new Date(2026,7,3)],
-    [new Date(2026,7,3), new Date(2026,7,10)], [new Date(2026,7,10), new Date(2026,7,17)],
-    [new Date(2026,7,17), new Date(2026,7,24)], [new Date(2026,7,24), new Date(2026,7,31)],
-    [new Date(2026,7,31), new Date(2026,8,2)]
-  ];
-  PLAN.forEach(function(w, i){
-    var isCurrent = now >= ranges[i][0] && now < ranges[i][1];
+  var h = '<div class="crumb">Study Plan</div><h2 class="pagetitle">Midterm-First Plan</h2>' +
+    '<p class="pagesub">The midterm is Wednesday, October 21, 2026. Only the calculus that Chapters 4–5 need comes before it; everything else waits until after the exam. Check off blocks as you finish them.</p>';
+  h += '<div class="keybox"><div class="extag">Midterm priorities</div>' +
+    '<ol style="margin:6px 0 0 20px;font-size:14.5px;">' +
+    '<li><b>Chapters 1–4 first.</b> Counting, conditional probability and discrete random variables are five of the six lectures before the exam and need almost no calculus. HW1 is your practice set.</li>' +
+    '<li><b>Calculus is for Chapter 5 only.</b> Differentiate and integrate powers and e^(kx), integrate to infinity, and move between a density and its CDF. That is Modules 3, 4, 6, 7 and Capstone Moves 1–3.</li>' +
+    '<li><b>Use the exam rules.</b> A one-page cram sheet (front and back) is allowed and calculators are not, so practise by hand and put the formulas on the sheet.</li>' +
+    '</ol></div>';
+  PLAN.forEach(function(w){
+    var from = new Date(w.from[0], w.from[1], w.from[2]), to = new Date(w.to[0], w.to[1], w.to[2]);
+    var isCurrent = now >= from && now < to;
     var mods = w.mods.map(function(mi){
       return '<button class="btn ghost small" data-page="' + MODULES[mi].id + '" style="margin:6px 6px 0 0;">Open: ' + MODULES[mi].short + '</button>';
     }).join("");
     var checked = store.weeks[w.id] ? "checked" : "";
     h += '<div class="week' + (isCurrent ? " current" : "") + '">' +
       '<div class="wknum">' + w.label + '<small>' + w.dates + '</small></div>' +
-      '<div class="wkbody"><h4>' + w.title + (isCurrent ? ' <span class="chip part">This week</span>' : '') + '</h4><p>' + w.desc + '</p>' + mods +
-      '<label class="wkcheck"><input type="checkbox" data-week="' + w.id + '" ' + checked + '> Week completed</label></div></div>';
+      '<div class="wkbody"><h4>' + w.title + (isCurrent ? ' <span class="chip part">Now</span>' : '') + '</h4><p>' + w.desc + '</p>' + mods +
+      '<label class="wkcheck"><input type="checkbox" data-week="' + w.id + '" ' + checked + '> ' + (w.check || "Block completed") + '</label></div></div>';
   });
   mainEl.innerHTML = h;
   mainEl.querySelectorAll("input[data-week]").forEach(function(cb){
@@ -1400,7 +1404,7 @@ function buildHelpText(fid){
     L.push("Lesson excerpt:", "", htmlToText((LESSON_BOXES[p.mid] || [])[p.idx] || ""));
   }
   if(f.note) L.push("", "My note about what confuses me: " + f.note);
-  L.push("", "I'm teaching myself calculus over the summer for an intro probability course (I've never taken calculus). Please explain this step by step in a different way than above, then give me one similar practice problem to check my understanding. (Math is written in LaTeX between $ signs.)");
+  L.push("", "I'm teaching myself calculus alongside an intro probability course (I've never taken calculus). Please explain this step by step in a different way than above, then give me one similar practice problem to check my understanding. (Math is written in LaTeX between $ signs.)");
   return L.join("\n");
 }
 function copyText(t, btn){
